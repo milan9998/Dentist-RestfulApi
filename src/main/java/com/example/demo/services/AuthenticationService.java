@@ -48,10 +48,12 @@ public class AuthenticationService {
 
         String jwtToken = jwtService.generateToken((Dentist) authenticatedUser);
         String refreshToken = jwtService.generateRefreshToken((Dentist) authenticatedUser);
+
+        //saving token in db
         Token token = new Token();
         token.setToken(jwtToken);
         token.setRefreshToken(refreshToken);
-        token.setDentist((Dentist) authenticatedUser); // Assuming Token entity has a relationship with User/Dentist entity
+        token.setDentist((Dentist) authenticatedUser);
         tokenRepository.save(token);
 
 
