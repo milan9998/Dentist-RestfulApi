@@ -1,0 +1,70 @@
+package com.example.demo.services;
+
+import com.example.demo.entities.User;
+import com.example.demo.exceptions.GlobalExceptionHandler;
+import com.example.demo.mappers.UserMapper;
+import com.example.demo.models.UserModel;
+import com.example.demo.repositories.IUserRepository;
+import jdk.jshell.spi.ExecutionControl;
+import lombok.RequiredArgsConstructor;
+
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
+
+@Service
+@RequiredArgsConstructor
+public class UserService implements IUserService {
+    private final IUserRepository userRepository;
+    private final BCryptPasswordEncoder passwordEncoder;
+
+    public List<UserModel> getAllUsers() {
+        List<User> users = new ArrayList<User>();
+        users = userRepository.findAll();
+        return UserMapper.toUserModelList(users);
+    }
+
+    @Override
+    public UserModel getUserById(int id) {
+        return null;
+    }
+
+    @Override
+    public UserModel getUserByEmail(String email) {
+        return null;
+    }
+
+    @Override
+    public UserModel getUserByUsername(String username) {
+        return null;
+    }
+
+    @Override
+    public UserModel createUser(UserModel model) {
+        var user = UserMapper.toEntity(model, passwordEncoder);
+
+        var alreadyExists = userRepository.findByEmail(model.getEmail());
+        if (alreadyExists.isPresent()) {
+            throw new IllegalArgumentException("Username already exists with this email :" + model.getEmail());
+        }
+
+        var savedUser = userRepository.save(user);
+        return UserMapper.toModel(savedUser);
+    }
+
+    @Override
+    public UserModel updateUser(UserModel user) {
+        return null;
+    }
+
+    @Override
+    public void delete(Integer user_id) {
+        var entity = userRepository.findById(user_id).orElseThrow(() -> new IllegalArgumentException("Not exist id:" + user_id));
+        ;
+        userRepository.delete(entity);
+
+    }
+}
