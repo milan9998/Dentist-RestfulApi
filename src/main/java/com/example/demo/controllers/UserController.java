@@ -1,6 +1,7 @@
 package com.example.demo.controllers;
 
 import com.example.demo.entities.User;
+import com.example.demo.models.RepairModel;
 import com.example.demo.models.UserModel;
 import com.example.demo.services.IUserService;
 import jakarta.validation.Valid;
@@ -30,6 +31,11 @@ public class UserController {
     @GetMapping("get-all-patients")
     public List<UserModel> getAllPatients() {
         return userService.getAllUsers();
+    }
+    @PostMapping("create-user-repair")
+    public ResponseEntity<?> createUserRepair(@RequestBody @Valid RepairModel repairModel, BindingResult result) {
+
+        return null;
     }
 
 

@@ -3,6 +3,7 @@ package com.example.demo.services;
 import com.example.demo.entities.User;
 import com.example.demo.exceptions.GlobalExceptionHandler;
 import com.example.demo.mappers.UserMapper;
+import com.example.demo.models.RepairModel;
 import com.example.demo.models.UserModel;
 import com.example.demo.repositories.IUserRepository;
 import jdk.jshell.spi.ExecutionControl;
@@ -26,6 +27,12 @@ public class UserService implements IUserService {
         users = userRepository.findAll();
         return UserMapper.toUserModelList(users);
     }
+
+    @Override
+    public List<RepairModel> createRepair(RepairModel repairModel) {
+        return List.of();
+    }
+
 
     @Override
     public UserModel getUserById(int id) {

@@ -1,6 +1,7 @@
 package com.example.demo.services;
 
 import com.example.demo.entities.User;
+import com.example.demo.models.RepairModel;
 import com.example.demo.models.UserModel;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -20,4 +21,6 @@ public interface IUserService {
     void delete(Integer user_id);
 
     List<UserModel> getAllUsers();
+
+    List<RepairModel> createRepair(RepairModel repairModel);
 }
