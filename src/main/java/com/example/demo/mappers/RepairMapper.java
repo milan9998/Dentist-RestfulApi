@@ -15,4 +15,18 @@ public class RepairMapper {
 
         return dentalRepair;
     }
+    public static RepairModel toModel(DentalRepair dentalRepair) {
+            DentalRepair dentalRepairToModel = new DentalRepair();
+        dentalRepairToModel.setId(dentalRepair.getId());
+        dentalRepairToModel.setName_of_repair(dentalRepair.getName_of_repair());
+        dentalRepairToModel.setPrice(dentalRepair.getPrice());
+        dentalRepairToModel.setDentist_id(dentalRepair.getDentist_id());
+        dentalRepairToModel.setUser_id(dentalRepair.getUser_id());
+        return RepairModel.builder().
+                id(dentalRepair.getId()).
+                name_of_repair(dentalRepair.getName_of_repair()).
+                price(dentalRepair.getPrice()).
+                dentist_id(dentalRepair.getDentist_id()).
+                user_id(dentalRepair.getUser_id()).build();
+    }
 }

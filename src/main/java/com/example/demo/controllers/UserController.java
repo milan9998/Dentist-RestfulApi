@@ -35,7 +35,7 @@ public class UserController {
     @PostMapping("create-user-repair")
     public ResponseEntity<?> createUserRepair(@RequestBody @Valid RepairModel repairModel, BindingResult result) {
 
-        return null;
+        return ResponseEntity.ok(userService.createRepair(repairModel));
     }
 
 

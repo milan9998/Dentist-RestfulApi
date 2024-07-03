@@ -1,10 +1,14 @@
 package com.example.demo.services;
 
+import com.example.demo.entities.DentalRepair;
 import com.example.demo.entities.User;
 import com.example.demo.exceptions.GlobalExceptionHandler;
+import com.example.demo.mappers.RepairMapper;
 import com.example.demo.mappers.UserMapper;
 import com.example.demo.models.RepairModel;
 import com.example.demo.models.UserModel;
+import com.example.demo.repositories.IDentistRepository;
+import com.example.demo.repositories.IRepairRepository;
 import com.example.demo.repositories.IUserRepository;
 import jdk.jshell.spi.ExecutionControl;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +25,7 @@ import java.util.List;
 public class UserService implements IUserService {
     private final IUserRepository userRepository;
     private final BCryptPasswordEncoder passwordEncoder;
+    private final IRepairRepository repairRepository;
 
     public List<UserModel> getAllUsers() {
         List<User> users = new ArrayList<User>();
@@ -29,10 +34,11 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public List<RepairModel> createRepair(RepairModel repairModel) {
-        return List.of();
+    public RepairModel createRepair(RepairModel repairModel) {
+        DentalRepair repair = RepairMapper.toEntity(repairModel);
+        var saved = repairRepository.save(repair);
+        return RepairMapper.toModel(saved);
     }
-
 
     @Override
     public UserModel getUserById(int id) {

@@ -22,5 +22,5 @@ public interface IUserService {
 
     List<UserModel> getAllUsers();
 
-    List<RepairModel> createRepair(RepairModel repairModel);
+    RepairModel createRepair(RepairModel repairModel);
 }
