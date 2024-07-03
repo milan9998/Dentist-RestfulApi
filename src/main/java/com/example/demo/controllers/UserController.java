@@ -3,6 +3,7 @@ package com.example.demo.controllers;
 import com.example.demo.entities.User;
 import com.example.demo.models.RepairModel;
 import com.example.demo.models.UserModel;
+import com.example.demo.services.IDentistService;
 import com.example.demo.services.IUserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -17,7 +18,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class UserController {
     private final IUserService userService;
-
+    private final IDentistService dentistService;
     @PostMapping("create-user")
     public ResponseEntity<?> createUser(@RequestBody @Valid UserModel userModel, BindingResult result) {
         return ResponseEntity.
@@ -36,6 +37,10 @@ public class UserController {
     public ResponseEntity<?> createUserRepair(@RequestBody @Valid RepairModel repairModel, BindingResult result) {
 
         return ResponseEntity.ok(userService.createRepair(repairModel));
+    }
+    @GetMapping("get-all-user-repairs")
+    public List<RepairModel> getAllUserRepairs() {
+        return dentistService.getAllRepairs();
     }
 
 
