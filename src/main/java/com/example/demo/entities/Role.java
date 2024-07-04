@@ -20,3 +20,4 @@ public class Role {
     @JsonBackReference
     private List<Dentist> dentists;
 }
+

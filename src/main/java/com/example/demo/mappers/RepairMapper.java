@@ -35,6 +35,7 @@ public class RepairMapper {
                 dentist_id(dentalRepair.getDentist_id()).
                 user_id(dentalRepair.getUser_id()).build();
     }
+
     public static List<RepairModel> toModelList(List<DentalRepair> dentalRepairs) {
         List<RepairModel> repairModels = new ArrayList<>();
         for (DentalRepair dentalRepair : dentalRepairs) {
@@ -43,4 +44,5 @@ public class RepairMapper {
         return repairModels;
 
     }
+
 }

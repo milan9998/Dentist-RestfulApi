@@ -7,6 +7,7 @@ import com.example.demo.repositories.IRepairRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -20,4 +21,20 @@ public class DentistService implements IDentistService {
 
         return RepairMapper.toModelList(repairs);
     }
+
+    @Override
+    public List<RepairModel> getByDentist_id(Integer dentist_id) {
+        var x = getAllBydentist_id(dentist_id);
+        return x;
+    }
+
+
+    public List<RepairModel> getAllBydentist_id(Integer dentist_id) {
+        List<RepairModel> repairModels = new ArrayList<>();
+        var  x = repairRepository.getAllBydentist_id(dentist_id);
+
+        return RepairMapper.toModelList(x);
+    }
+
+
 }
