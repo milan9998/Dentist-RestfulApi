@@ -2,9 +2,11 @@ package com.example.demo.services;
 
 import com.example.demo.entities.DentalRepair;
 import com.example.demo.mappers.RepairMapper;
+import com.example.demo.models.DentistImportantModel;
 import com.example.demo.models.RepairModel;
 import com.example.demo.repositories.IRepairRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -14,6 +16,7 @@ import java.util.List;
 @Service
 @AllArgsConstructor
 public class DentistService implements IDentistService {
+
     private final IRepairRepository repairRepository;
 
     public List<RepairModel> getAllRepairs() {
@@ -30,10 +33,17 @@ public class DentistService implements IDentistService {
 
 
     public List<RepairModel> getAllBydentist_id(Integer dentist_id) {
-        List<RepairModel> repairModels = new ArrayList<>();
+
         var  x = repairRepository.getAllBydentist_id(dentist_id);
 
         return RepairMapper.toModelList(x);
+    }
+    @Override
+    public List<DentistImportantModel> getAllImportant(Integer dentist_id) {
+
+        var x = repairRepository.getAllBydentist_id(dentist_id);
+
+        return RepairMapper.toModelImportantList(x);
     }
 
 

@@ -1,6 +1,7 @@
 package com.example.demo.controllers;
 
 import com.example.demo.entities.User;
+import com.example.demo.models.DentistImportantModel;
 import com.example.demo.models.RepairModel;
 import com.example.demo.models.UserModel;
 import com.example.demo.services.DentistService;
@@ -48,8 +49,8 @@ public class UserController {
     }
 
     @GetMapping("get-repairs-by-dentist")
-    public List<RepairModel> getRepairsByDentist(@RequestParam @Valid Integer dentist_id) {
-        return dentistService.getByDentist_id(dentist_id);
+    public List<DentistImportantModel> getRepairsByDentist(@RequestParam @Valid Integer dentist_id) {
+        return dentistService.getAllImportant(dentist_id);
     }
 
 

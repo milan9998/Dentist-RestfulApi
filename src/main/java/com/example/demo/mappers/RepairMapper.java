@@ -1,6 +1,7 @@
 package com.example.demo.mappers;
 
 import com.example.demo.entities.DentalRepair;
+import com.example.demo.models.DentistImportantModel;
 import com.example.demo.models.RepairModel;
 
 import java.util.ArrayList;
@@ -17,6 +18,23 @@ public class RepairMapper {
         dentalRepair.setUser_id(repairModel.getUser_id());
 
         return dentalRepair;
+    }
+
+    public static DentistImportantModel toImportantModel(DentalRepair dentalRepair) {
+        DentalRepair dentalRepairToModel = new DentalRepair();
+
+        dentalRepairToModel.setUser_id(dentalRepair.getUser_id());
+        dentalRepairToModel.setName_of_repair(dentalRepair.getName_of_repair());
+        dentalRepairToModel.setPrice(dentalRepair.getPrice());
+
+
+        return DentistImportantModel.builder().
+
+                name_of_repair(dentalRepair.
+                        getName_of_repair()).
+                        user_id(dentalRepair.getUser_id()).
+                        price(dentalRepair.getPrice()).
+                        build();
     }
 
     public static RepairModel toModel(DentalRepair dentalRepair) {
@@ -43,6 +61,14 @@ public class RepairMapper {
         }
         return repairModels;
 
+    }
+
+    public static List<DentistImportantModel> toModelImportantList(List<DentalRepair> dentalRepairs) {
+        List<DentistImportantModel> dentistImportantModels = new ArrayList<>();
+        for (DentalRepair dentalRepair : dentalRepairs) {
+            dentistImportantModels.add(toImportantModel(dentalRepair));
+        }
+        return  dentistImportantModels;
     }
 
 }

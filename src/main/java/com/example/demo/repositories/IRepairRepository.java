@@ -8,7 +8,18 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.List;
 
 public interface IRepairRepository extends JpaRepository<DentalRepair, Integer> {
-   @Query("SELECT dr FROM DentalRepair dr WHERE dr.dentist_id = :dentist_id")
-   List<DentalRepair> getAllBydentist_id(Integer dentist_id);
+
+
+    @Query(value = "SELECT * FROM dental_repairs dr WHERE dr.dentist_id = :dentist_id", nativeQuery = true)
+    List<DentalRepair> getAllBydentist_id(Integer dentist_id);
 
 }
+
+
+
+
+
+
+
+
+
