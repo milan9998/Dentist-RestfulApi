@@ -1,12 +1,15 @@
 package com.example.demo.services;
 
 import com.example.demo.entities.Dentist;
+import com.example.demo.entities.DentistRoles;
+import com.example.demo.entities.Role;
 import com.example.demo.entities.Token;
 import com.example.demo.mappers.UserMapper;
 import com.example.demo.models.DentistModel;
 import com.example.demo.models.LoginDentistModel;
 import com.example.demo.models.LoginResponseModel;
 import com.example.demo.repositories.IDentistRepository;
+import com.example.demo.repositories.IRoleRepository;
 import com.example.demo.repositories.ITokenRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -23,6 +26,7 @@ public class AuthenticationService {
     private final AuthenticationManager authenticationManager;
     private final JwtService jwtService;
     private final ITokenRepository tokenRepository;
+    private final IRoleRepository roleRepository;
 
     public DentistModel signUp(DentistModel dentistModel) {
         var newUser = UserMapper.toEntity(dentistModel,passwordEncoder);
@@ -32,6 +36,11 @@ public class AuthenticationService {
             throw new IllegalArgumentException("Email already in use");
         }
         var saveUser = dentistRepository.save(newUser);
+        DentistRoles dentistRoles = new DentistRoles();
+        dentistRoles.setDentist_id(1);
+        dentistRoles.setRole_id(1);
+        roleRepository.save(dentistRoles);
+
 
         return UserMapper.toModel(saveUser);
     }
