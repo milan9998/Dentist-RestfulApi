@@ -3,6 +3,8 @@ package com.example.demo.entities;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.util.List;
+
 @Entity
 @Data
 @Table(name="dentists_roles")
@@ -14,6 +16,7 @@ public class DentistRoles {
     private Integer dentist_id;
     @Column(name="role_id")
     private Integer role_id;
+
 
 
 

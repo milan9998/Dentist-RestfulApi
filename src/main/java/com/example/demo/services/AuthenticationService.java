@@ -18,6 +18,9 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class AuthenticationService {
@@ -28,6 +31,7 @@ public class AuthenticationService {
     private final ITokenRepository tokenRepository;
     private final IRoleRepository roleRepository;
 
+
     public DentistModel signUp(DentistModel dentistModel) {
         var newUser = UserMapper.toEntity(dentistModel,passwordEncoder);
 
@@ -35,11 +39,21 @@ public class AuthenticationService {
         if(userMayExist.isPresent()) {
             throw new IllegalArgumentException("Email already in use");
         }
+        //new mapper may be needed for insert
         var saveUser = dentistRepository.save(newUser);
-        DentistRoles dentistRoles = new DentistRoles();
-        dentistRoles.setDentist_id(1);
-        dentistRoles.setRole_id(1);
-        roleRepository.save(dentistRoles);
+
+        Dentist dentist = new Dentist();
+
+       List<Dentist>  allDentist = new ArrayList<>();
+       allDentist = dentistRepository.findAll();
+       //setting the dentist role for every new dentist singned up
+       for(Dentist d : allDentist) {
+           DentistRoles dentistRoles = new DentistRoles();
+           dentistRoles.setDentist_id(d.getId());
+           dentistRoles.setRole_id(1);
+           roleRepository.save(dentistRoles);
+       }
+
 
 
         return UserMapper.toModel(saveUser);
