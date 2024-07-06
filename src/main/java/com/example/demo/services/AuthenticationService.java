@@ -33,10 +33,10 @@ public class AuthenticationService {
 
 
     public DentistModel signUp(DentistModel dentistModel) {
-        var newUser = UserMapper.toEntity(dentistModel,passwordEncoder);
+        var newUser = UserMapper.toEntity(dentistModel, passwordEncoder);
 
         var userMayExist = dentistRepository.findByEmail(dentistModel.getEmail());
-        if(userMayExist.isPresent()) {
+        if (userMayExist.isPresent()) {
             throw new IllegalArgumentException("Email already in use");
         }
         //new mapper may be needed for insert
@@ -44,16 +44,16 @@ public class AuthenticationService {
 
         Dentist dentist = new Dentist();
 
-       List<Dentist>  allDentist = new ArrayList<>();
-       allDentist = dentistRepository.findAll();
-       //setting the dentist role for every new dentist singned up
-       for(Dentist d : allDentist) {
-           DentistRoles dentistRoles = new DentistRoles();
-           dentistRoles.setDentist_id(d.getId());
-           dentistRoles.setRole_id(1);
-           roleRepository.save(dentistRoles);
-       }
+        List<Dentist> allDentist = new ArrayList<>();
+        allDentist = dentistRepository.findAll();
+        //setting the dentist role for every new dentist singned up
+        DentistRoles dentistRoles = new DentistRoles();
 
+        for (Dentist d : allDentist) {
+            dentistRoles.setDentist_id(d.getId());
+            dentistRoles.setRole_id(1);
+            roleRepository.save(dentistRoles);
+        }
 
 
         return UserMapper.toModel(saveUser);
@@ -62,8 +62,8 @@ public class AuthenticationService {
     public LoginResponseModel authenticate(LoginDentistModel loginDentistModel) throws Throwable {
         authenticationManager.authenticate
                 (new UsernamePasswordAuthenticationToken(
-                     loginDentistModel.getEmail(),
-                     loginDentistModel.getPassword()
+                        loginDentistModel.getEmail(),
+                        loginDentistModel.getPassword()
                 ));
 
         var authenticatedUser = dentistRepository.findByEmail(loginDentistModel.getEmail())
@@ -80,10 +80,7 @@ public class AuthenticationService {
         tokenRepository.save(token);
 
 
-
         return LoginResponseModel.builder().token(jwtToken).refreshToken(refreshToken).build();
-
-
 
 
     }
