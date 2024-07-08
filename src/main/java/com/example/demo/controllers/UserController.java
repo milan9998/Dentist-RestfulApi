@@ -3,6 +3,7 @@ package com.example.demo.controllers;
 import com.example.demo.entities.User;
 import com.example.demo.models.DentistImportantModel;
 import com.example.demo.models.RepairModel;
+import com.example.demo.models.SchedulModel;
 import com.example.demo.models.UserModel;
 import com.example.demo.services.DentistService;
 import com.example.demo.services.IDentistService;
@@ -51,6 +52,10 @@ public class UserController {
     @GetMapping("get-repairs-by-dentist")
     public List<DentistImportantModel> getRepairsByDentist(@RequestParam @Valid Integer dentist_id) {
         return dentistService.getAllImportant(dentist_id);
+    }
+    @PostMapping("schedul-patient")
+    public ResponseEntity<?> schedulPatient(@RequestBody @Valid SchedulModel schedulModel, BindingResult result) {
+        return ResponseEntity.ok(dentistService.createSchedul(schedulModel));
     }
 
 

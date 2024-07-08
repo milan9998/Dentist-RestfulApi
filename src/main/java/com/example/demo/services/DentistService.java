@@ -1,10 +1,14 @@
 package com.example.demo.services;
 
 import com.example.demo.entities.DentalRepair;
+import com.example.demo.entities.SchedulePatient;
 import com.example.demo.mappers.RepairMapper;
 import com.example.demo.models.DentistImportantModel;
 import com.example.demo.models.RepairModel;
+import com.example.demo.models.SchedulModel;
 import com.example.demo.repositories.IRepairRepository;
+import com.example.demo.repositories.IScheduleRepository;
+import com.example.demo.repositories.IUserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,6 +22,8 @@ import java.util.List;
 public class DentistService implements IDentistService {
 
     private final IRepairRepository repairRepository;
+    private final IScheduleRepository scheduleRepository;
+    private final IUserRepository userRepository;
 
     public List<RepairModel> getAllRepairs() {
         List<DentalRepair> repairs = repairRepository.findAll();
@@ -45,6 +51,14 @@ public class DentistService implements IDentistService {
 
         return RepairMapper.toModelImportantList(x);
     }
+    @Override
+    public SchedulModel createSchedul(SchedulModel schedul) {
+        SchedulePatient patient = RepairMapper.toEntity(schedul);
+        scheduleRepository.save(patient);
+        return RepairMapper.toModel(patient);
+    }
+
+
 
 
 }

@@ -1,8 +1,10 @@
 package com.example.demo.mappers;
 
 import com.example.demo.entities.DentalRepair;
+import com.example.demo.entities.SchedulePatient;
 import com.example.demo.models.DentistImportantModel;
 import com.example.demo.models.RepairModel;
+import com.example.demo.models.SchedulModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,13 +22,32 @@ public class RepairMapper {
         return dentalRepair;
     }
 
+
+
+
+    public static SchedulePatient toEntity(SchedulModel model) {
+        SchedulePatient schedulePatient = new SchedulePatient();
+        schedulePatient.setUser_id(model.getUser_id());
+        schedulePatient.setDentist_id(model.getDentist_id());
+        schedulePatient.setDate(model.getDate());
+        schedulePatient.setTime(model.getTime());
+        return schedulePatient;
+    }
+    public static SchedulModel toModel(SchedulePatient schedulePatient) {
+
+        return SchedulModel.builder().
+                user_id(schedulePatient.getUser_id()).
+                dentist_id(schedulePatient.getDentist_id()).
+                date(schedulePatient.getDate()).
+                time(schedulePatient.getTime()).
+                build();
+
+    }
+
+
+
+
     public static DentistImportantModel toImportantModel(DentalRepair dentalRepair) {
-        DentalRepair dentalRepairToModel = new DentalRepair();
-
-        dentalRepairToModel.setUser_id(dentalRepair.getUser_id());
-        dentalRepairToModel.setName_of_repair(dentalRepair.getName_of_repair());
-        dentalRepairToModel.setPrice(dentalRepair.getPrice());
-
 
         return DentistImportantModel.builder().
 
@@ -38,13 +59,7 @@ public class RepairMapper {
     }
 
     public static RepairModel toModel(DentalRepair dentalRepair) {
-        DentalRepair dentalRepairToModel = new DentalRepair();
 
-        dentalRepairToModel.setId(dentalRepair.getId());
-        dentalRepairToModel.setName_of_repair(dentalRepair.getName_of_repair());
-        dentalRepairToModel.setPrice(dentalRepair.getPrice());
-        dentalRepairToModel.setDentist_id(dentalRepair.getDentist_id());
-        dentalRepairToModel.setUser_id(dentalRepair.getUser_id());
 
         return RepairModel.builder().
                 id(dentalRepair.getId()).
