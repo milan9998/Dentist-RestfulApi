@@ -5,9 +5,8 @@ import com.example.demo.models.DentistImportantModel;
 import com.example.demo.models.RepairModel;
 import com.example.demo.models.SchedulModel;
 import com.example.demo.models.UserModel;
-import com.example.demo.services.DentistService;
-import com.example.demo.services.IDentistService;
-import com.example.demo.services.IUserService;
+import com.example.demo.repositories.IScheduleRepository;
+import com.example.demo.services.*;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -22,7 +21,8 @@ import java.util.List;
 public class UserController {
     private final IUserService userService;
     private final IDentistService dentistService;
-    //private final DentistService  service;
+    private final IScheduleService scheduleService;
+
 
 
     @PostMapping("create-user")
@@ -56,6 +56,11 @@ public class UserController {
     @PostMapping("schedul-patient")
     public ResponseEntity<?> schedulPatient(@RequestBody @Valid SchedulModel schedulModel, BindingResult result) {
         return ResponseEntity.ok(dentistService.createSchedul(schedulModel));
+    }
+    @DeleteMapping("delete-schedule")
+    public ResponseEntity<?> deleteSchedule(Integer schedule_id) {
+        scheduleService.deleteById(schedule_id);
+        return ResponseEntity.ok("Deleted Schedule with id " + schedule_id);
     }
 
 

@@ -40,6 +40,8 @@ public class UserService implements IUserService {
         return RepairMapper.toModel(saved);
     }
 
+
+
     @Override
     public UserModel getUserById(int id) {
         return null;
@@ -75,9 +77,8 @@ public class UserService implements IUserService {
 
     @Override
     public void delete(Integer user_id) {
-        var entity = userRepository.findById(user_id).orElseThrow(() -> new IllegalArgumentException("Not exist id:" + user_id));
-        ;
-        userRepository.delete(entity);
 
     }
+
+
 }

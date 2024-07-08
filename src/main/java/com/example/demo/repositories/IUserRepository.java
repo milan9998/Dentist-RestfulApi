@@ -9,4 +9,5 @@ public interface IUserRepository extends JpaRepository<User, Integer> {
     Optional findByEmail(String email);
     //Optional findByEmail(String email);
     Boolean findById(int id);
+    void deleteById(int id);
 }
