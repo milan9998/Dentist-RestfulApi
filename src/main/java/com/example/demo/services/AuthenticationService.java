@@ -46,7 +46,7 @@ public class AuthenticationService {
 
         List<Dentist> allDentist = new ArrayList<>();
         allDentist = dentistRepository.findAll();
-        //setting the dentist role for every new dentist singned up
+        //setting the dentist role for every new dentist signed up
         DentistRoles dentistRoles = new DentistRoles();
 
         for (Dentist d : allDentist) {
@@ -79,10 +79,16 @@ public class AuthenticationService {
         token.setDentist((Dentist) authenticatedUser);
         tokenRepository.save(token);
 
-
         return LoginResponseModel.builder().token(jwtToken).refreshToken(refreshToken).build();
+    }
 
-
+    public void Logout(){
+        //tokenRepository.deleteAll();
+        Token tok = new Token();
+        tok.setExpired(true);
+        tok.setRevoked(true);
+        tokenRepository.save(tok);
     }
 
 }
+

@@ -21,4 +21,9 @@ public class AuthenticationController {
     public ResponseEntity<?> login(@RequestBody LoginDentistModel dentistModel) throws Throwable {
         return ResponseEntity.ok(authenticationService.authenticate(dentistModel));
     }
+    @PostMapping("/logout")
+    public ResponseEntity<?> logout() {
+        authenticationService.Logout();
+        return ResponseEntity.ok("Logout successful");
+    }
 }

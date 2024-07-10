@@ -1,5 +1,6 @@
 package com.example.demo.repositories;
 
+import com.example.demo.entities.Dentist;
 import com.example.demo.entities.Token;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -17,4 +18,5 @@ public interface ITokenRepository extends JpaRepository<Token, Long> {
 
     Optional<Token> findByToken(String token);
     Optional<Token> findByRefreshToken(String refreshToken);
+    Optional<Token> findTokenByDentist(Dentist dentist);
 }
