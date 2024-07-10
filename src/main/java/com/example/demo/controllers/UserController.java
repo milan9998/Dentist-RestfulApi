@@ -1,11 +1,9 @@
 package com.example.demo.controllers;
 
-import com.example.demo.entities.User;
 import com.example.demo.models.DentistImportantModel;
 import com.example.demo.models.RepairModel;
 import com.example.demo.models.SchedulModel;
 import com.example.demo.models.UserModel;
-import com.example.demo.repositories.IScheduleRepository;
 import com.example.demo.services.*;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -54,9 +52,10 @@ public class UserController {
         return dentistService.getAllImportant(dentist_id);
     }
     @PostMapping("schedule-patient")
-    public ResponseEntity<?> schedulPatient(@RequestBody @Valid SchedulModel schedulModel, BindingResult result) {
+    public ResponseEntity<?> schedulePatient(@RequestBody @Valid SchedulModel schedulModel, BindingResult result) {
         return ResponseEntity.ok(dentistService.createSchedul(schedulModel));
     }
+
     @DeleteMapping("delete-schedule")
     public ResponseEntity<?> deleteSchedule(Integer schedule_id) {
         scheduleService.deleteById(schedule_id);
