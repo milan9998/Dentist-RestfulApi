@@ -60,8 +60,12 @@ public class DentistService implements IDentistService {
 
         if (!x.isPresent()) {
             User user = new User();
-            user.setId(schedul.getUser_id());
+            user.setFirst_name(schedul.getFirst_name());
+            user.setLast_name(schedul.getLast_name());
+            user.setEmail(schedul.getEmail());
+            user.setContact_number(schedul.getContact_number());
             userRepository.save(user);
+
         }
 
 

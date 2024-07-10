@@ -12,6 +12,10 @@ import java.util.Date;
 public class SchedulModel {
     private Integer user_id;
     private Integer dentist_id;
+    private String first_name;
+    private String last_name;
+    private String email;
+    private String contact_number;
     private Date date;
     private Time time;
 }

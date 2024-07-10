@@ -53,7 +53,7 @@ public class UserController {
     public List<DentistImportantModel> getRepairsByDentist(@RequestParam @Valid Integer dentist_id) {
         return dentistService.getAllImportant(dentist_id);
     }
-    @PostMapping("schedul-patient")
+    @PostMapping("schedule-patient")
     public ResponseEntity<?> schedulPatient(@RequestBody @Valid SchedulModel schedulModel, BindingResult result) {
         return ResponseEntity.ok(dentistService.createSchedul(schedulModel));
     }
