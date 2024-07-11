@@ -82,7 +82,7 @@ public class AuthenticationService {
         return LoginResponseModel.builder().token(jwtToken).refreshToken(refreshToken).build();
     }
 
-    public void Logout(LogoutRequestModel id) {
+    public void logout(LogoutRequestModel id) {
 
         int y = id.getId();
         var x = tokenRepository.revokeTokens(y);
