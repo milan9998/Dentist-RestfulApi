@@ -2,6 +2,7 @@ package com.example.demo.controllers;
 
 import com.example.demo.models.DentistModel;
 import com.example.demo.models.LoginDentistModel;
+import com.example.demo.models.LogoutRequestModel;
 import com.example.demo.services.AuthenticationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -21,9 +22,12 @@ public class AuthenticationController {
     public ResponseEntity<?> login(@RequestBody LoginDentistModel dentistModel) throws Throwable {
         return ResponseEntity.ok(authenticationService.authenticate(dentistModel));
     }
-    @PostMapping("/logout")
-    public ResponseEntity<?> logout() {
-        authenticationService.Logout();
+
+    @PutMapping("/logout")
+    public ResponseEntity<?> logout(@RequestBody LogoutRequestModel x) {
+
+
+       authenticationService.Logout(x);
         return ResponseEntity.ok("Logout successful");
     }
 }

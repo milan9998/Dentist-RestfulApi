@@ -2,12 +2,12 @@ package com.example.demo.services;
 
 import com.example.demo.entities.Dentist;
 import com.example.demo.entities.DentistRoles;
-import com.example.demo.entities.Role;
 import com.example.demo.entities.Token;
 import com.example.demo.mappers.UserMapper;
 import com.example.demo.models.DentistModel;
 import com.example.demo.models.LoginDentistModel;
 import com.example.demo.models.LoginResponseModel;
+import com.example.demo.models.LogoutRequestModel;
 import com.example.demo.repositories.IDentistRepository;
 import com.example.demo.repositories.IRoleRepository;
 import com.example.demo.repositories.ITokenRepository;
@@ -82,13 +82,13 @@ public class AuthenticationService {
         return LoginResponseModel.builder().token(jwtToken).refreshToken(refreshToken).build();
     }
 
-    public void Logout(){
-        //tokenRepository.deleteAll();
-        Token tok = new Token();
-        tok.setExpired(true);
-        tok.setRevoked(true);
-        tokenRepository.save(tok);
+    public void Logout(LogoutRequestModel id) {
+
+        int y = id.getId();
+        var x = tokenRepository.revokeTokens(y);
     }
+
+
 
 }
 
