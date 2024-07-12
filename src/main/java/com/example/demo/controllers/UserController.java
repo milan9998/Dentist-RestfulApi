@@ -1,17 +1,25 @@
 package com.example.demo.controllers;
 
-import com.example.demo.models.DentistImportantModel;
-import com.example.demo.models.RepairModel;
-import com.example.demo.models.SchedulModel;
-import com.example.demo.models.UserModel;
+import com.example.demo.models.*;
 import com.example.demo.services.*;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.module.SimpleModule;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
 import jakarta.validation.Valid;
+import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("user")
@@ -62,6 +70,15 @@ public class UserController {
     public ResponseEntity<?> deleteSchedule(Integer schedule_id) {
         scheduleService.deleteById(schedule_id);
         return ResponseEntity.ok("Deleted Schedule with id " + schedule_id);
+    }
+
+    @GetMapping("get-all-schedulings-date")
+    public List<SchedulModel> getAllSchedulings(@RequestBody @Valid DateModel date) throws ParseException {
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        Date dates = sdf.parse(sdf.format(date.getDate()));
+
+        return scheduleService.getAllSchedulingsByDate(dates);
     }
 
 

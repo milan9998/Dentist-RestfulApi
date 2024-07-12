@@ -1,5 +1,6 @@
 package com.example.demo.entities;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -17,17 +18,13 @@ public class SchedulePatient {
     private Integer user_id;
     @Column(name="dentist_id")
     private Integer dentist_id;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     @Column(name="appointment_date")
     private Date date;
+
     @Column(name="appointment_time")
     private Time time;
-
-    /*
-    user_id int,
-dentist_id int,
-appointment_date date,
-appointment_time time,
-    */
 
 
 }

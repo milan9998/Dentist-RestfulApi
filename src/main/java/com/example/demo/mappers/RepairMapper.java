@@ -43,7 +43,23 @@ public class RepairMapper {
                 build();
 
     }
+    public static List<SchedulModel> toModelListAll(List<SchedulePatient> schedulePatient){
+        List<SchedulModel> list = new ArrayList<>();
+        for (SchedulePatient schedulePatient1: schedulePatient) {
+            list.add(toModel(schedulePatient1));
+        }
+        return list;
+    }
 
+
+    public static List<RepairModel> toModelList(List<DentalRepair> dentalRepairs) {
+        List<RepairModel> repairModels = new ArrayList<>();
+        for (DentalRepair dentalRepair : dentalRepairs) {
+            repairModels.add(toModel(dentalRepair));
+        }
+        return repairModels;
+
+    }
 
 
 
@@ -69,14 +85,7 @@ public class RepairMapper {
                 user_id(dentalRepair.getUser_id()).build();
     }
 
-    public static List<RepairModel> toModelList(List<DentalRepair> dentalRepairs) {
-        List<RepairModel> repairModels = new ArrayList<>();
-        for (DentalRepair dentalRepair : dentalRepairs) {
-            repairModels.add(toModel(dentalRepair));
-        }
-        return repairModels;
 
-    }
 
     public static List<DentistImportantModel> toModelImportantList(List<DentalRepair> dentalRepairs) {
         List<DentistImportantModel> dentistImportantModels = new ArrayList<>();

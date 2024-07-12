@@ -18,4 +18,6 @@ public class SchedulModel {
     private String contact_number;
     private Date date;
     private Time time;
+
+
 }
