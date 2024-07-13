@@ -72,7 +72,7 @@ public class UserController {
         return ResponseEntity.ok("Deleted Schedule with id " + schedule_id);
     }
 
-    @GetMapping("get-all-schedulings-date")
+    @GetMapping("get-all-schedulings-by-date")
     public List<SchedulModel> getAllSchedulings(@RequestBody @Valid DateModel date) throws ParseException {
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
