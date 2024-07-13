@@ -14,8 +14,11 @@ import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -57,25 +60,30 @@ public class DentistService implements IDentistService {
     @Override
     public SchedulModel createSchedul(SchedulModel schedul) {
         var x = userRepository.findById(schedul.getUser_id());
+        Date y = schedul.getDate();
+        Date z = new Date();
 
-        if (!x.isPresent()) {
-            User user = new User();
-            user.setFirst_name(schedul.getFirst_name());
-            user.setLast_name(schedul.getLast_name());
-            user.setEmail(schedul.getEmail());
-            user.setContact_number(schedul.getContact_number());
-            userRepository.save(user);
+        if (y.before(z)) {
+            throw new IllegalArgumentException("Your can not schedule in the past");
+        } else {
+            if (!x.isPresent()) {
+                User user = new User();
+                user.setFirst_name(schedul.getFirst_name());
+                user.setLast_name(schedul.getLast_name());
+                user.setEmail(schedul.getEmail());
+                user.setContact_number(schedul.getContact_number());
+                userRepository.save(user);
 
+            }
+
+
+            SchedulePatient patient = RepairMapper.toEntity(schedul);
+            scheduleRepository.save(patient);
+            return RepairMapper.toModel(patient);
         }
 
 
-        SchedulePatient patient = RepairMapper.toEntity(schedul);
-        scheduleRepository.save(patient);
-        return RepairMapper.toModel(patient);
     }
-
-
-
 
 
 }
