@@ -61,10 +61,16 @@ public class UserController {
         return dentistService.getAllImportant(dentist_id);
     }
 
+    @GetMapping("get-all-try")
+    public List<CheckModel> getEvery(){
+        return dentistService.getAllNeeded();
+    }
+
     @PostMapping("schedule-patient")
     public ResponseEntity<?> schedulePatient(@RequestBody @Valid SchedulModel schedulModel, BindingResult result) {
         return ResponseEntity.ok(dentistService.createSchedul(schedulModel));
     }
+
 
     @DeleteMapping("delete-schedule")
     public ResponseEntity<?> deleteSchedule(Integer schedule_id) {

@@ -4,6 +4,7 @@ import com.example.demo.entities.DentalRepair;
 import com.example.demo.entities.SchedulePatient;
 import com.example.demo.entities.User;
 import com.example.demo.mappers.RepairMapper;
+import com.example.demo.models.CheckModel;
 import com.example.demo.models.DentistImportantModel;
 import com.example.demo.models.RepairModel;
 import com.example.demo.models.SchedulModel;
@@ -59,31 +60,54 @@ public class DentistService implements IDentistService {
 
     @Override
     public SchedulModel createSchedul(SchedulModel schedul) {
-        var x = userRepository.findById(schedul.getUser_id());
+     //   var x = userRepository.findById(schedul.getUser_id());
+        var x = userRepository.findByEmail(schedul.getEmail());
         Date y = schedul.getDate();
         Date z = new Date();
-
+        var smth = getAllNeeded();
         if (y.before(z)) {
             throw new IllegalArgumentException("Your can not schedule in the past");
-        } else {
-            if (!x.isPresent()) {
-                User user = new User();
-                user.setFirst_name(schedul.getFirst_name());
-                user.setLast_name(schedul.getLast_name());
-                user.setEmail(schedul.getEmail());
-                user.setContact_number(schedul.getContact_number());
-                userRepository.save(user);
-
-            }
+        }
+        User user = new User();
+        if (!x.isPresent()) {
 
 
-            SchedulePatient patient = RepairMapper.toEntity(schedul);
-            scheduleRepository.save(patient);
-            return RepairMapper.toModel(patient);
+            user.setFirst_name(schedul.getFirst_name());
+            user.setLast_name(schedul.getLast_name());
+            user.setEmail(schedul.getEmail());
+            user.setContact_number(schedul.getContact_number());
+            userRepository.save(user);
+
+            schedul.setUser_id(user.getId());
+
+        }else {
+            schedul.setUser_id(user.getId());
+
         }
 
 
+        //if is emtpy
+
+        SchedulePatient patient = RepairMapper.toEntity(schedul);
+        scheduleRepository.save(patient);
+        return RepairMapper.toModel(patient);
+
+    }
+
+    @Override
+    public List<CheckModel> getAllNeeded() {
+        var x = scheduleRepository.getAllNeeded();
+
+        return RepairMapper.toModelCheckList(x);
     }
 
 
 }
+    /*      for (CheckModel cm : smth) {
+            if (cm.getDentist_id() == schedul.getDentist_id() &&
+                    cm.getDate().equals(schedul.getDate()) &&
+                    cm.getTime().equals(schedul.getTime()))   {
+
+                throw new IllegalArgumentException("That time is already in the schedule");
+            }
+        } */

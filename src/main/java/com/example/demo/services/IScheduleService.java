@@ -11,4 +11,6 @@ public interface IScheduleService {
     void deleteById(Integer id);
 
     List<SchedulModel> getAllSchedulingsByDate(Date date);
+
+
 }

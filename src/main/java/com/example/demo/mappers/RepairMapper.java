@@ -2,6 +2,7 @@ package com.example.demo.mappers;
 
 import com.example.demo.entities.DentalRepair;
 import com.example.demo.entities.SchedulePatient;
+import com.example.demo.models.CheckModel;
 import com.example.demo.models.DentistImportantModel;
 import com.example.demo.models.RepairModel;
 import com.example.demo.models.SchedulModel;
@@ -84,6 +85,24 @@ public class RepairMapper {
                 dentist_id(dentalRepair.getDentist_id()).
                 user_id(dentalRepair.getUser_id()).build();
     }
+
+    public static CheckModel toModelCheck(SchedulePatient schedulePatient) {
+
+        return CheckModel.builder().
+                dentist_id(schedulePatient.getDentist_id()).
+                date(schedulePatient.getDate()).
+                time(schedulePatient.getTime()).build();
+    }
+
+    public static List<CheckModel> toModelCheckList(List<SchedulePatient> schedulePatient) {
+        List<CheckModel> list = new ArrayList<>();
+        for (SchedulePatient schedulePatient1: schedulePatient) {
+            list.add(toModelCheck(schedulePatient1));
+
+        }
+        return list;
+    }
+
 
 
 
