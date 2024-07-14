@@ -17,10 +17,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.Instant;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Service
 @AllArgsConstructor
@@ -61,7 +58,10 @@ public class DentistService implements IDentistService {
     @Override
     public SchedulModel createSchedul(SchedulModel schedul) {
      //   var x = userRepository.findById(schedul.getUser_id());
-        var x = userRepository.findByEmail(schedul.getEmail());
+        Optional<User> x = userRepository.findByEmail(schedul.getEmail());
+
+
+
         Date y = schedul.getDate();
         Date z = new Date();
         var smth = getAllNeeded();
@@ -69,6 +69,7 @@ public class DentistService implements IDentistService {
             throw new IllegalArgumentException("Your can not schedule in the past");
         }
         User user = new User();
+        //if user does not exist
         if (!x.isPresent()) {
 
 
@@ -78,12 +79,12 @@ public class DentistService implements IDentistService {
             user.setContact_number(schedul.getContact_number());
             userRepository.save(user);
 
-            schedul.setUser_id(user.getId());
-
         }else {
-            schedul.setUser_id(user.getId());
-
+            user=x.get();
         }
+        schedul.setUser_id(user.getId());
+
+
 
 
         //if is emtpy
