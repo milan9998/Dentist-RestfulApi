@@ -91,7 +91,8 @@ public class DentistService implements IDentistService {
             if (dates.equals(checkModel.getDate()) &&
                     time.equals(time) &&
                     checkModel.getDentist_id() == schedul.getDentist_id()) {
-                throw new IllegalArgumentException("You can not schedule in the same time, please schedule in another time");
+                throw new IllegalArgumentException("You can not schedule in the same time, please schedule in another time" + checkModel.getTime() +" at the same time"+
+                        checkModel.getDate());
             }
         }
 

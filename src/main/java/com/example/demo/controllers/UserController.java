@@ -76,8 +76,6 @@ public class UserController {
 
     @PostMapping("schedule-patient")
     public ResponseEntity<?> schedulePatient(@RequestBody @Valid SchedulModel schedulModel, BindingResult result) throws ParseException {
-
-
         return ResponseEntity.ok(dentistService.createSchedul(schedulModel));
     }
 
