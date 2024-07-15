@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.Time;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -51,6 +52,7 @@ public class UserController {
 
         return ResponseEntity.ok(userService.createRepair(repairModel));
     }
+
     @GetMapping("get-all-user-repairs")
     public List<RepairModel> getAllUserRepairs() {
         return dentistService.getAllRepairs();
@@ -61,13 +63,21 @@ public class UserController {
         return dentistService.getAllImportant(dentist_id);
     }
 
-    @GetMapping("get-all-try")
-    public List<CheckModel> getEvery(){
-        return dentistService.getAllNeeded();
+    @PostMapping("get-all-try")
+    public List<CheckModel> getEvery(@RequestBody @Valid CheckModel checkModel) throws ParseException {
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        Date dates = formatter.parse(formatter.format(checkModel.getDate()));
+        String timeString = checkModel.getTime().toString();
+
+        SimpleDateFormat formatTime = new SimpleDateFormat("HH:mm:ss");
+        Time time = new Time(formatTime.parse(timeString).getTime());
+        return dentistService.getAllNeeded(dates,time,checkModel.getDentist_id());
     }
 
     @PostMapping("schedule-patient")
-    public ResponseEntity<?> schedulePatient(@RequestBody @Valid SchedulModel schedulModel, BindingResult result) {
+    public ResponseEntity<?> schedulePatient(@RequestBody @Valid SchedulModel schedulModel, BindingResult result) throws ParseException {
+
+
         return ResponseEntity.ok(dentistService.createSchedul(schedulModel));
     }
 

@@ -1,5 +1,6 @@
 package com.example.demo.services;
 
+import ch.qos.logback.classic.Logger;
 import com.example.demo.entities.DentalRepair;
 import com.example.demo.entities.SchedulePatient;
 import com.example.demo.entities.User;
@@ -15,6 +16,9 @@ import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.sql.Time;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.util.*;
@@ -56,18 +60,48 @@ public class DentistService implements IDentistService {
     }
 
     @Override
-    public SchedulModel createSchedul(SchedulModel schedul) {
-     //   var x = userRepository.findById(schedul.getUser_id());
-        Optional<User> x = userRepository.findByEmail(schedul.getEmail());
+    public List<CheckModel> getAllNeeded(Date date, Time time, Integer dentist_id) {
+        var x = scheduleRepository.getAllNeeded(date, time, dentist_id);
+        //  System.out.println(x.size());
+        return RepairMapper.toModelCheckList(x);
+    }
 
+    @Override
+    public SchedulModel createSchedul(SchedulModel schedul) throws ParseException {
+        //   var x = userRepository.findById(schedul.getUser_id());
+        Optional<User> x = userRepository.findByEmail(schedul.getEmail());
 
 
         Date y = schedul.getDate();
         Date z = new Date();
-        var smth = getAllNeeded();
+
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        Date dates = formatter.parse(formatter.format(schedul.getDate()));
+        String timeString = schedul.getTime().toString();
+
+        SimpleDateFormat formatTime = new SimpleDateFormat("HH:mm:ss");
+        Time time = new Time(formatTime.parse(timeString).getTime());
+
+
+        List<CheckModel> smth = getAllNeeded(dates, time, schedul.getDentist_id());
+
+
+        for (CheckModel checkModel : smth) {
+
+            if (dates.equals(checkModel.getDate()) &&
+                    time.equals(time) &&
+                    checkModel.getDentist_id() == schedul.getDentist_id()) {
+                throw new IllegalArgumentException("You can not schedule in the same time, please schedule in another time");
+            }
+        }
+
+
         if (y.before(z)) {
             throw new IllegalArgumentException("Your can not schedule in the past");
         }
+        System.out.println(smth.size());
+
+
         User user = new User();
         //if user does not exist
         if (!x.isPresent()) {
@@ -79,12 +113,10 @@ public class DentistService implements IDentistService {
             user.setContact_number(schedul.getContact_number());
             userRepository.save(user);
 
-        }else {
-            user=x.get();
+        } else {
+            user = x.get();
         }
         schedul.setUser_id(user.getId());
-
-
 
 
         //if is emtpy
@@ -95,12 +127,13 @@ public class DentistService implements IDentistService {
 
     }
 
-    @Override
-    public List<CheckModel> getAllNeeded() {
+
+ /*   @Override
+    public List<CheckModel> getAllNeeded(Date date, Time time, Integer dentist_id) {
         var x = scheduleRepository.getAllNeeded();
 
         return RepairMapper.toModelCheckList(x);
-    }
+    }*/
 
 
 }
