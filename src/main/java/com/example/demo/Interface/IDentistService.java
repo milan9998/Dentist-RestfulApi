@@ -1,6 +1,5 @@
-package com.example.demo.services;
+package com.example.demo.Interface;
 
-import com.example.demo.entities.SchedulePatient;
 import com.example.demo.models.CheckModel;
 import com.example.demo.models.DentistImportantModel;
 import com.example.demo.models.RepairModel;

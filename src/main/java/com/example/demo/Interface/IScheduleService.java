@@ -1,7 +1,6 @@
-package com.example.demo.services;
+package com.example.demo.Interface;
 
 
-import com.example.demo.models.DateModel;
 import com.example.demo.models.SchedulModel;
 
 import java.util.Date;

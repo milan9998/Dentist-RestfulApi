@@ -1,9 +1,7 @@
-package com.example.demo.services;
+package com.example.demo.Interface;
 
-import com.example.demo.entities.User;
 import com.example.demo.models.RepairModel;
 import com.example.demo.models.UserModel;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.List;
 

@@ -1,26 +1,20 @@
 package com.example.demo.controllers;
 
+import com.example.demo.Interface.IDentistService;
+import com.example.demo.Interface.IScheduleService;
+import com.example.demo.Interface.IUserService;
 import com.example.demo.models.*;
-import com.example.demo.services.*;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.module.SimpleModule;
-import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
 import jakarta.validation.Valid;
-import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.Time;
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("user")

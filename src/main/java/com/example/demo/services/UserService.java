@@ -1,20 +1,17 @@
 package com.example.demo.services;
 
+import com.example.demo.Interface.IUserService;
 import com.example.demo.entities.DentalRepair;
 import com.example.demo.entities.User;
-import com.example.demo.exceptions.GlobalExceptionHandler;
 import com.example.demo.mappers.RepairMapper;
 import com.example.demo.mappers.UserMapper;
 import com.example.demo.models.RepairModel;
 import com.example.demo.models.UserModel;
-import com.example.demo.repositories.IDentistRepository;
 import com.example.demo.repositories.IRepairRepository;
 import com.example.demo.repositories.IUserRepository;
-import jdk.jshell.spi.ExecutionControl;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;

@@ -1,6 +1,6 @@
 package com.example.demo.services;
 
-import ch.qos.logback.classic.Logger;
+import com.example.demo.Interface.IDentistService;
 import com.example.demo.entities.DentalRepair;
 import com.example.demo.entities.SchedulePatient;
 import com.example.demo.entities.User;
@@ -13,14 +13,11 @@ import com.example.demo.repositories.IRepairRepository;
 import com.example.demo.repositories.IScheduleRepository;
 import com.example.demo.repositories.IUserRepository;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.sql.Time;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.Instant;
-import java.time.LocalDate;
 import java.util.*;
 
 @Service
