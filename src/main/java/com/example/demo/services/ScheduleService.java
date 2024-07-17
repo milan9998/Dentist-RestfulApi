@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import java.sql.Time;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -30,7 +31,6 @@ public class ScheduleService implements IScheduleService {
     }
 
 
-
     @Override
     public List<SchedulModel> getAllSchedulingsByDate(Date date) {
 
@@ -40,26 +40,31 @@ public class ScheduleService implements IScheduleService {
     }
 
     @Override
-    public SchedulModel createSchedul(SchedulModel schedul) throws ParseException {
-        Optional<User> userMayExist = userRepository.findByEmail(schedul.getEmail());
-        Date saveDateEntry = schedul.getDate();
+    public SchedulModel createSchedul(SchedulModel schedule) throws ParseException {
+        Optional<User> userMayExist = userRepository.findByEmail(schedule.getEmail());
+        Date saveDateEntry = schedule.getDate();
         Date currentDate = new Date();
 
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-        Date dates = formatter.parse(formatter.format(schedul.getDate()));
-        String timeString = schedul.getTime().toString();
+        Date dates = formatter.parse(formatter.format(schedule.getDate()));
+        String timeString = schedule.getTime().toString();
 
         SimpleDateFormat formatTime = new SimpleDateFormat("HH:mm:ss");
         Time time = new Time(formatTime.parse(timeString).getTime());
 
-        List<CheckModel> smth = getSchedulesByDateTimeDentistId(dates, time, schedul.getDentist_id());
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(time);
+        calendar.add(Calendar.MINUTE, 30);
+
+
+        List<CheckModel> smth = getSchedulesByDateTimeDentistId(dates, time, schedule.getDentist_id());
 
         for (CheckModel checkModel : smth) {
 
             if (dates.equals(checkModel.getDate()) &&
-                    time.equals(time) &&
-                    checkModel.getDentist_id() == schedul.getDentist_id()) {
-                throw new IllegalArgumentException("You can not schedule in the same time, please schedule in another time" + checkModel.getTime() + " at the same time" +
+                    time.equals(checkModel.getTime()) &&
+                    checkModel.getDentist_id() == schedule.getDentist_id()) {
+                throw new IllegalArgumentException("You can not schedule in the same time, please schedule in another time" + checkModel.getTime() + " or in another date " +
                         checkModel.getDate());
             }
         }
@@ -70,17 +75,17 @@ public class ScheduleService implements IScheduleService {
         User user = new User();
 
         if (!userMayExist.isPresent()) {
-            user.setFirst_name(schedul.getFirst_name());
-            user.setLast_name(schedul.getLast_name());
-            user.setEmail(schedul.getEmail());
-            user.setContact_number(schedul.getContact_number());
+            user.setFirst_name(schedule.getFirst_name());
+            user.setLast_name(schedule.getLast_name());
+            user.setEmail(schedule.getEmail());
+            user.setContact_number(schedule.getContact_number());
             userRepository.save(user);
 
         } else {
             user = userMayExist.get();
         }
-        schedul.setUser_id(user.getId());
-        SchedulePatient patient = RepairMapper.toEntity(schedul);
+        schedule.setUser_id(user.getId());
+        SchedulePatient patient = RepairMapper.toEntity(schedule);
         iScheduleRepository.save(patient);
         return RepairMapper.toModel(patient);
 
