@@ -1,4 +1,4 @@
-package com.example.demo.Interface;
+package com.example.demo.Interfaces;
 
 import com.example.demo.models.CheckModel;
 import com.example.demo.models.DentistImportantModel;
@@ -15,11 +15,11 @@ public interface IDentistService {
 
     List<RepairModel> getByDentist_id(Integer dentist_id);
 
-    List<DentistImportantModel> getAllImportant(Integer dentistId);
+    List<DentistImportantModel> getAllInformationsByDentistid(Integer dentistId);
     // List<RepairModel> getByDentist_id(Integer dentist_id);
     SchedulModel createSchedul(SchedulModel schedul) throws ParseException;
 
-    List<CheckModel> getAllNeeded(Date date, Time time, Integer dentist_id);
+    List<CheckModel> getSchedulesByDateTimeDentistId(Date date, Time time, Integer dentist_id);
 
 
 

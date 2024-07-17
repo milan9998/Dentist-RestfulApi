@@ -1,4 +1,4 @@
-package com.example.demo.Interface;
+package com.example.demo.Interfaces;
 
 import com.example.demo.models.RepairModel;
 import com.example.demo.models.UserModel;

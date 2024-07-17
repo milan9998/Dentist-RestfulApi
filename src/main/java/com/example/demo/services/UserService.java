@@ -1,6 +1,6 @@
 package com.example.demo.services;
 
-import com.example.demo.Interface.IUserService;
+import com.example.demo.Interfaces.IUserService;
 import com.example.demo.entities.DentalRepair;
 import com.example.demo.entities.User;
 import com.example.demo.mappers.RepairMapper;
