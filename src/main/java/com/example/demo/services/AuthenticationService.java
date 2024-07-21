@@ -1,5 +1,7 @@
 package com.example.demo.services;
 
+import com.example.demo.Interfaces.IMailService;
+import com.example.demo.entities.ConfirmationToken;
 import com.example.demo.entities.Dentist;
 import com.example.demo.entities.DentistRoles;
 import com.example.demo.entities.Token;
@@ -8,10 +10,12 @@ import com.example.demo.models.DentistModel;
 import com.example.demo.models.LoginDentistModel;
 import com.example.demo.models.LoginResponseModel;
 import com.example.demo.models.LogoutRequestModel;
+import com.example.demo.repositories.IConfirmationRepository;
 import com.example.demo.repositories.IDentistRepository;
 import com.example.demo.repositories.IRoleRepository;
 import com.example.demo.repositories.ITokenRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.mail.SimpleMailMessage;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -30,7 +34,8 @@ public class AuthenticationService {
     private final JwtService jwtService;
     private final ITokenRepository tokenRepository;
     private final IRoleRepository roleRepository;
-
+    private final IConfirmationRepository confirmationRepository;
+    private final IMailService mailService;
 
     public DentistModel signUp(DentistModel dentistModel) {
         var newUser = UserMapper.toEntity(dentistModel, passwordEncoder);
@@ -41,6 +46,21 @@ public class AuthenticationService {
         }
         //new mapper may be needed for insert
         var saveUser = dentistRepository.save(newUser);
+
+        ConfirmationToken confirmationToken = new ConfirmationToken(saveUser);
+        confirmationRepository.save(confirmationToken);
+        try {
+            // Slanje emaila za potvrdu
+            SimpleMailMessage mailMessage = new SimpleMailMessage();
+            mailMessage.setTo(saveUser.getEmail());
+            mailMessage.setSubject("Complete Registration!");
+            mailMessage.setText("To confirm your account, please click here : "
+                    + "http://localhost:8080/confirm-account?token=" + confirmationToken.getConfirmationToken());
+            mailService.sendEmail(mailMessage);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
 
         Dentist dentist = new Dentist();
 
@@ -54,7 +74,6 @@ public class AuthenticationService {
             dentistRoles.setRole_id(1);
             roleRepository.save(dentistRoles);
         }
-
 
         return UserMapper.toModel(saveUser);
     }
@@ -87,7 +106,6 @@ public class AuthenticationService {
         int y = id.getId();
         var x = tokenRepository.revokeTokens(y);
     }
-
 
 
 }

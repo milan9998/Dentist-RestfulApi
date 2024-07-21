@@ -9,4 +9,7 @@ import java.util.Optional;
 public interface IDentistRepository extends JpaRepository<Dentist, Integer> {
     Optional findByEmail(String email);
     RepairModel findById(int id);
+
+    Boolean existsByEmail(String email);
+    Dentist findByEmailIgnoreCase(String email);
 }

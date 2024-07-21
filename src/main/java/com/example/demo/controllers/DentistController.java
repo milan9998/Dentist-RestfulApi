@@ -3,6 +3,7 @@ package com.example.demo.controllers;
 import com.example.demo.Interfaces.IDentistService;
 import com.example.demo.Interfaces.IScheduleService;
 import com.example.demo.Interfaces.IUserService;
+import com.example.demo.entities.Dentist;
 import com.example.demo.models.*;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +24,7 @@ public class DentistController {
     private final IDentistService dentistService;
     private final IScheduleService scheduleService;
 
+
     @PostMapping("create-user")
     public ResponseEntity<?> createUser(@RequestBody @Valid UserModel userModel, BindingResult result) {
         return ResponseEntity.
@@ -30,7 +32,7 @@ public class DentistController {
     }
 
     @DeleteMapping("user-delete")
-    public ResponseEntity<?> deleteUser(Integer user_id) {
+    public ResponseEntity<?> deleteUser(@RequestParam Integer user_id) {
         userService.delete(user_id);
         return ResponseEntity.ok("Deleted user with id " + user_id);
     }
@@ -63,7 +65,7 @@ public class DentistController {
 
 
     @DeleteMapping("delete-schedule")
-    public ResponseEntity<?> deleteSchedule(Integer schedule_id) {
+    public ResponseEntity<?> deleteSchedule(@RequestParam Integer schedule_id) {
         scheduleService.deleteById(schedule_id);
         return ResponseEntity.ok("Deleted Schedule with id " + schedule_id);
     }

@@ -1,18 +1,17 @@
 package com.example.demo.services;
 
 import com.example.demo.Interfaces.IDentistService;
-import com.example.demo.entities.DentalRepair;
-import com.example.demo.entities.SchedulePatient;
-import com.example.demo.entities.User;
+import com.example.demo.Interfaces.IMailService;
+import com.example.demo.entities.*;
 import com.example.demo.mappers.RepairMapper;
 import com.example.demo.models.CheckModel;
 import com.example.demo.models.DentistImportantModel;
 import com.example.demo.models.RepairModel;
 import com.example.demo.models.SchedulModel;
-import com.example.demo.repositories.IRepairRepository;
-import com.example.demo.repositories.IScheduleRepository;
-import com.example.demo.repositories.IUserRepository;
+import com.example.demo.repositories.*;
 import lombok.AllArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.mail.SimpleMailMessage;
 import org.springframework.stereotype.Service;
 
 import java.sql.Time;
@@ -27,6 +26,22 @@ public class DentistService implements IDentistService {
     private final IRepairRepository repairRepository;
     private final IScheduleRepository scheduleRepository;
     private final IUserRepository userRepository;
+    private final IConfirmationRepository confirmationRepository;
+    private final IDentistRepository dentistRepository;
+    private final IMailService mailService;
+
+
+    @Override
+    public ResponseEntity<?> confirmEmail(String confirmationToken) {
+        ConfirmationToken token = confirmationRepository.findByConfirmationToken(confirmationToken);
+        if (token != null && !token.getDentist().isEnabled()) {
+            Dentist dentist = token.getDentist();
+            dentist.setEnabled(true);
+            dentistRepository.save(dentist);
+            return ResponseEntity.ok("Email verified successfully");
+        }
+        return ResponseEntity.badRequest().body("Error: Couldn't verify email");
+    }
 
     public List<RepairModel> getAllRepairs() {
         List<DentalRepair> repairs = repairRepository.findAll();
@@ -61,6 +76,8 @@ public class DentistService implements IDentistService {
         var schedules = scheduleRepository.getAllByDateTimeDentistId(date, time, dentist_id);
         return RepairMapper.toModelCheckList(schedules);
     }
+
+
 
     @Override
     public SchedulModel createSchedul(SchedulModel schedul) throws ParseException {

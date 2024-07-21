@@ -1,9 +1,11 @@
 package com.example.demo.Interfaces;
 
+import com.example.demo.entities.Dentist;
 import com.example.demo.models.CheckModel;
 import com.example.demo.models.DentistImportantModel;
 import com.example.demo.models.RepairModel;
 import com.example.demo.models.SchedulModel;
+import org.springframework.http.ResponseEntity;
 
 import java.sql.Time;
 import java.text.ParseException;
@@ -21,7 +23,7 @@ public interface IDentistService {
 
     List<CheckModel> getSchedulesByDateTimeDentistId(Date date, Time time, Integer dentist_id);
 
-
+    ResponseEntity<?> confirmEmail(String confirmationToken);
 
 
     

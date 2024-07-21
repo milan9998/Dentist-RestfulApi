@@ -1,8 +1,11 @@
 package com.example.demo.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -14,6 +17,7 @@ import java.util.List;
 @Entity
 @Table(name="dentists")
 @Data
+
 
 public class Dentist implements UserDetails {
     @Id
@@ -30,13 +34,21 @@ public class Dentist implements UserDetails {
     @Column(name = "password")
     private String password;
 
+    private boolean enabled;
+
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(name="dentists_roles",
-            joinColumns = @JoinColumn(name ="id",referencedColumnName = "id"),
+            joinColumns = @JoinColumn(name ="dentist_id",referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name="role_id",referencedColumnName = "id")
     )
     @JsonManagedReference
     private List<Role> roles;
+
+
+    @OneToMany(mappedBy = "dentist", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
+    private List<ConfirmationToken> confirmationTokens;
+
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -48,28 +60,16 @@ public class Dentist implements UserDetails {
         return authorities;
     }
 
+
     @Override
     public String getUsername() {
         return email;
     }
 
     @Override
-    public boolean isAccountNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
-        return true;
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return true;
-    }
-
-    @Override
     public boolean isEnabled() {
-        return true;
+        return enabled;
     }
+
+
 }
