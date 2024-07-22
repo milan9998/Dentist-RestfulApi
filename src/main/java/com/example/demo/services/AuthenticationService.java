@@ -15,11 +15,16 @@ import com.example.demo.repositories.IDentistRepository;
 import com.example.demo.repositories.IRoleRepository;
 import com.example.demo.repositories.ITokenRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
+import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
+import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -27,7 +32,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class AuthenticationService {
+public class AuthenticationService implements OAuth2UserService<OAuth2UserRequest, OAuth2User> {
     private final IDentistRepository dentistRepository;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
@@ -37,7 +42,7 @@ public class AuthenticationService {
     private final IConfirmationRepository confirmationRepository;
     private final IMailService mailService;
 
-    public DentistModel signUp(DentistModel dentistModel) {
+    public ResponseEntity<String> signUp(DentistModel dentistModel) {
         var newUser = UserMapper.toEntity(dentistModel, passwordEncoder);
 
         var userMayExist = dentistRepository.findByEmail(dentistModel.getEmail());
@@ -49,14 +54,17 @@ public class AuthenticationService {
 
         ConfirmationToken confirmationToken = new ConfirmationToken(saveUser);
         confirmationRepository.save(confirmationToken);
+        SimpleMailMessage mailMessage = null;
         try {
             // Slanje emaila za potvrdu
-            SimpleMailMessage mailMessage = new SimpleMailMessage();
+            mailMessage = new SimpleMailMessage();
             mailMessage.setTo(saveUser.getEmail());
             mailMessage.setSubject("Complete Registration!");
             mailMessage.setText("To confirm your account, please click here : "
                     + "http://localhost:8080/confirm-account?token=" + confirmationToken.getConfirmationToken());
             mailService.sendEmail(mailMessage);
+
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -75,7 +83,8 @@ public class AuthenticationService {
             roleRepository.save(dentistRoles);
         }
 
-        return UserMapper.toModel(saveUser);
+        return ResponseEntity.ok("To confirm your account, please click here : "
+                + "http://localhost:8080/auth/confirm-account?token=" + confirmationToken.getConfirmationToken());
     }
 
     public LoginResponseModel authenticate(LoginDentistModel loginDentistModel) throws Throwable {
@@ -108,5 +117,9 @@ public class AuthenticationService {
     }
 
 
+    @Override
+    public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
+        return null;
+    }
 }
 

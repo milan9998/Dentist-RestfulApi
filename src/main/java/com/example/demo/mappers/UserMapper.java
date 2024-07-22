@@ -34,6 +34,7 @@ public class UserMapper {
         return DentistModel.builder().
                 email(dentist.getEmail()).
 
+
                 build();
     }
 
