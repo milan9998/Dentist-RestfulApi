@@ -61,7 +61,7 @@ public class AuthenticationService implements OAuth2UserService<OAuth2UserReques
             mailMessage.setTo(saveUser.getEmail());
             mailMessage.setSubject("Complete Registration!");
             mailMessage.setText("To confirm your account, please click here : "
-                    + "http://localhost:8080/confirm-account?token=" + confirmationToken.getConfirmationToken());
+                    + "http://localhost:8080/auth/confirm-account?token=" + confirmationToken.getConfirmationToken());
             mailService.sendEmail(mailMessage);
 
 
