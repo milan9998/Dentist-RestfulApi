@@ -83,8 +83,7 @@ public class AuthenticationService implements OAuth2UserService<OAuth2UserReques
             roleRepository.save(dentistRoles);
         }
 
-        return ResponseEntity.ok("To confirm your account, please click here : "
-                + "http://localhost:8080/auth/confirm-account?token=" + confirmationToken.getConfirmationToken());
+        return ResponseEntity.ok("To confirm your account, please check your e-mail address!");
     }
 
     public LoginResponseModel authenticate(LoginDentistModel loginDentistModel) throws Throwable {
