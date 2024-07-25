@@ -55,8 +55,6 @@ public class ScheduleService implements IScheduleService {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(time);
         calendar.add(Calendar.MINUTE, 30);
-
-
         List<CheckModel> smth = getSchedulesByDateTimeDentistId(dates, time, schedule.getDentist_id());
 
         for (CheckModel checkModel : smth) {
@@ -68,19 +66,18 @@ public class ScheduleService implements IScheduleService {
                         checkModel.getDate());
             }
         }
+
         if (saveDateEntry.before(currentDate)) {
             throw new IllegalArgumentException("Your can not schedule in the past");
         }
 
         User user = new User();
-
         if (!userMayExist.isPresent()) {
             user.setFirst_name(schedule.getFirst_name());
             user.setLast_name(schedule.getLast_name());
             user.setEmail(schedule.getEmail());
             user.setContact_number(schedule.getContact_number());
             userRepository.save(user);
-
         } else {
             user = userMayExist.get();
         }

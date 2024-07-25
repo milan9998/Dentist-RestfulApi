@@ -29,7 +29,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-
+//
 @Service
 @RequiredArgsConstructor
 public class AuthenticationService implements OAuth2UserService<OAuth2UserRequest, OAuth2User> {
