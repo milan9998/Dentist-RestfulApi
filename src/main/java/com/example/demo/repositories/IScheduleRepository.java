@@ -17,5 +17,6 @@ public interface IScheduleRepository extends JpaRepository<SchedulePatient,Integ
     @Query(value = "SELECT * FROM scheduling_patients WHERE appointment_date= :date AND appointment_time= :time AND dentist_id= :dentist_id",nativeQuery = true)
     List<SchedulePatient> getAllByDateTimeDentistId(Date date, Time time, Integer dentist_id);
 
-
+    @Query(value = "SELECT * FROM scheduling_patients",nativeQuery = true)
+    List<SchedulePatient> getAllAppointmentTime();
 }

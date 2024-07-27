@@ -4,6 +4,7 @@ import com.example.demo.Interfaces.IScheduleService;
 import com.example.demo.entities.SchedulePatient;
 import com.example.demo.entities.User;
 import com.example.demo.mappers.RepairMapper;
+import com.example.demo.models.AppointmentModel;
 import com.example.demo.models.CheckModel;
 import com.example.demo.models.SchedulModel;
 import com.example.demo.repositories.IScheduleRepository;
@@ -14,7 +15,6 @@ import org.springframework.stereotype.Service;
 import java.sql.Time;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -45,32 +45,51 @@ public class ScheduleService implements IScheduleService {
         Date saveDateEntry = schedule.getDate();
         Date currentDate = new Date();
 
+
+        //  1
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
         Date dates = formatter.parse(formatter.format(schedule.getDate()));
         String timeString = schedule.getTime().toString();
 
+        // 2
+
         SimpleDateFormat formatTime = new SimpleDateFormat("HH:mm:ss");
         Time time = new Time(formatTime.parse(timeString).getTime());
 
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(time);
-        calendar.add(Calendar.MINUTE, 30);
+        var allUsedAppointments = getAllAppointmentTime();
+
+        int minutes = time.getMinutes();
+
+
+        if (minutes % 30 != 0) {
+            throw new ParseException("You must enter the right time here is used available time " + allUsedAppointments , 0);
+        }
+
+
+
+        //  1   2
         List<CheckModel> smth = getSchedulesByDateTimeDentistId(dates, time, schedule.getDentist_id());
+
+
+
 
         for (CheckModel checkModel : smth) {
 
             if (dates.equals(checkModel.getDate()) &&
                     time.equals(checkModel.getTime()) &&
-                    checkModel.getDentist_id() == schedule.getDentist_id()) {
-                throw new IllegalArgumentException("You can not schedule in the same time, please schedule in another time" + checkModel.getTime() + " or in another date " +
+                    checkModel.getDentist_id() == schedule.getDentist_id()
+            ) {
+                throw new IllegalArgumentException("You can not schedule in the same time, please schedule in another time" + "check here all used appointments "+allUsedAppointments + " or in another date " +
                         checkModel.getDate());
             }
         }
 
+
+
+
         if (saveDateEntry.before(currentDate)) {
             throw new IllegalArgumentException("Your can not schedule in the past");
         }
-
         User user = new User();
         if (!userMayExist.isPresent()) {
             user.setFirst_name(schedule.getFirst_name());
@@ -93,6 +112,14 @@ public class ScheduleService implements IScheduleService {
     public List<CheckModel> getSchedulesByDateTimeDentistId(Date date, Time time, Integer dentist_id) {
         var schedules = iScheduleRepository.getAllByDateTimeDentistId(date, time, dentist_id);
         return RepairMapper.toModelCheckList(schedules);
+    }
+
+
+    @Override
+    public List<AppointmentModel> getAllAppointmentTime() {
+        var allusedAppointments = iScheduleRepository.getAllAppointmentTime();
+
+        return RepairMapper.toTimeModelList(allusedAppointments);
     }
 
 

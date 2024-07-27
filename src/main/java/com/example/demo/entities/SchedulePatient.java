@@ -27,4 +27,6 @@ public class SchedulePatient {
     private Time time;
 
 
+
+
 }

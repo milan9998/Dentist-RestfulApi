@@ -52,6 +52,10 @@ public class DentistController {
     public List<RepairModel> getAllUserRepairs() {
         return dentistService.getAllRepairs();
     }
+    @GetMapping("get-all-used-appointments")
+    public List<AppointmentModel> getAllAppointments() {
+        return scheduleService.getAllAppointmentTime();
+    }
 
     @GetMapping("get-repairs-by-dentist-id")
     public List<DentistImportantModel> getRepairsByDentistId(@RequestParam @Valid Integer dentist_id) {

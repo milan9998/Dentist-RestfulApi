@@ -1,6 +1,8 @@
 package com.example.demo.Interfaces;
 
 
+import com.example.demo.entities.SchedulePatient;
+import com.example.demo.models.AppointmentModel;
 import com.example.demo.models.CheckModel;
 import com.example.demo.models.SchedulModel;
 
@@ -17,6 +19,7 @@ public interface IScheduleService {
 
     List<CheckModel> getSchedulesByDateTimeDentistId(Date date, Time time, Integer dentist_id);
 
+    List<AppointmentModel> getAllAppointmentTime();
 
 
 }
