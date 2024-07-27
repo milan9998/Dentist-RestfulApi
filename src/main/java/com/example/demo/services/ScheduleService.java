@@ -62,7 +62,7 @@ public class ScheduleService implements IScheduleService {
 
 
         if (minutes % 30 != 0) {
-            throw new ParseException("You must enter the right time here is used available time " + allUsedAppointments , 0);
+            throw new ParseException("You must enter the right time here is used appointments " + allUsedAppointments , 0);
         }
 
 
