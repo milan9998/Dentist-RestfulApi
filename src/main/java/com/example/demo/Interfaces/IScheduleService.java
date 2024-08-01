@@ -10,12 +10,13 @@ import java.sql.Time;
 import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 public interface IScheduleService {
     void deleteById(Integer id);
 
     List<SchedulModel> getAllSchedulingsByDate(Date date);
-    SchedulModel createSchedul(SchedulModel schedul) throws ParseException;
+    CompletableFuture<SchedulModel> createSchedul(SchedulModel schedul) throws ParseException;
 
     List<CheckModel> getSchedulesByDateTimeDentistId(Date date, Time time, Integer dentist_id);
 

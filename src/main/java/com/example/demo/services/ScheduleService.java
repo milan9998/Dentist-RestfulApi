@@ -18,6 +18,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
 
 @Service
 @AllArgsConstructor
@@ -40,7 +41,7 @@ public class ScheduleService implements IScheduleService {
     }
 
     @Override
-    public SchedulModel createSchedul(SchedulModel schedule) throws ParseException {
+    public CompletableFuture<SchedulModel> createSchedul(SchedulModel schedule) throws ParseException {
         Optional<User> userMayExist = userRepository.findByEmail(schedule.getEmail());
         Date saveDateEntry = schedule.getDate();
         Date currentDate = new Date();
@@ -103,7 +104,7 @@ public class ScheduleService implements IScheduleService {
         schedule.setUser_id(user.getId());
         SchedulePatient patient = RepairMapper.toEntity(schedule);
         iScheduleRepository.save(patient);
-        return RepairMapper.toModel(patient);
+        return CompletableFuture.completedFuture(RepairMapper.toModel(patient));
 
     }
 
