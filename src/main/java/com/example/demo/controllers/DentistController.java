@@ -7,6 +7,7 @@ import com.example.demo.entities.Dentist;
 import com.example.demo.models.*;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -15,6 +16,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletionException;
 
 @RestController
 @RequestMapping("dentist")
@@ -63,8 +66,22 @@ public class DentistController {
     }
 
     @PostMapping("schedule-patient")
-    public ResponseEntity<?> schedulePatient(@RequestBody @Valid SchedulModel schedulModel, BindingResult result) throws ParseException {
-        return ResponseEntity.ok(scheduleService.createSchedul(schedulModel));
+    public ResponseEntity<?> schedulePatient(@RequestBody @Valid SchedulModel schedulModel, BindingResult result) {
+        try {
+            CompletableFuture<SchedulModel> future = scheduleService.createSchedul(schedulModel);
+            SchedulModel resultModel = future.join(); // Wait for completion and get the result
+
+            return ResponseEntity.ok(resultModel);
+        } catch (CompletionException e) {
+            // Handle the exception
+            Throwable cause = e.getCause();
+            if (cause instanceof IllegalArgumentException) {
+                return ResponseEntity.badRequest().body(cause.getMessage());
+            }
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(cause.getMessage());
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
     }
 
 

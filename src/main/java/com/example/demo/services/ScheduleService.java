@@ -10,6 +10,7 @@ import com.example.demo.models.SchedulModel;
 import com.example.demo.repositories.IScheduleRepository;
 import com.example.demo.repositories.IUserRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.sql.Time;
@@ -41,7 +42,9 @@ public class ScheduleService implements IScheduleService {
     }
 
     @Override
+    @Async
     public CompletableFuture<SchedulModel> createSchedul(SchedulModel schedule) throws ParseException {
+
         Optional<User> userMayExist = userRepository.findByEmail(schedule.getEmail());
         Date saveDateEntry = schedule.getDate();
         Date currentDate = new Date();
