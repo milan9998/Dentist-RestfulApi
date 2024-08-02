@@ -10,6 +10,8 @@ import com.example.demo.models.SchedulModel;
 import com.example.demo.repositories.IScheduleRepository;
 import com.example.demo.repositories.IUserRepository;
 import lombok.AllArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
@@ -26,6 +28,8 @@ import java.util.concurrent.CompletableFuture;
 public class ScheduleService implements IScheduleService {
     IScheduleRepository iScheduleRepository;
     IUserRepository userRepository;
+
+   private static final Logger logger = LoggerFactory.getLogger(ScheduleService.class);
 
     @Override
     public void deleteById(Integer id) {
@@ -101,12 +105,14 @@ public class ScheduleService implements IScheduleService {
             user.setEmail(schedule.getEmail());
             user.setContact_number(schedule.getContact_number());
             userRepository.save(user);
+            logger.info("Created new user " + user.getFirst_name() + " " + user.getLast_name() + " " + user.getEmail());
         } else {
             user = userMayExist.get();
         }
         schedule.setUser_id(user.getId());
         SchedulePatient patient = RepairMapper.toEntity(schedule);
         iScheduleRepository.save(patient);
+
         return CompletableFuture.completedFuture(RepairMapper.toModel(patient));
 
     }

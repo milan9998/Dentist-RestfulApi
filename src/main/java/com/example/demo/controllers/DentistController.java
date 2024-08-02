@@ -7,6 +7,7 @@ import com.example.demo.entities.Dentist;
 import com.example.demo.models.*;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -26,6 +27,7 @@ public class DentistController {
     private final IUserService userService;
     private final IDentistService dentistService;
     private final IScheduleService scheduleService;
+
 
 
     @PostMapping("create-user")
@@ -67,6 +69,7 @@ public class DentistController {
 
     @PostMapping("schedule-patient")
     public ResponseEntity<?> schedulePatient(@RequestBody @Valid SchedulModel schedulModel, BindingResult result) {
+
         try {
             CompletableFuture<SchedulModel> future = scheduleService.createSchedul(schedulModel);
             SchedulModel resultModel = future.join(); // Wait for completion and get the result
