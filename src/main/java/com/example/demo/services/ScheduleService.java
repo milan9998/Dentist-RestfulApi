@@ -64,7 +64,9 @@ public class ScheduleService implements IScheduleService {
         SimpleDateFormat formatTime = new SimpleDateFormat("HH:mm:ss");
         Time time = new Time(formatTime.parse(timeString).getTime());
 
-        var allUsedAppointments = getAllAppointmentTime();
+      //  var allUsedAppointments = getAllAppointmentTime();
+        CompletableFuture<List<AppointmentModel>> future = getAllAppointmentTime();
+        List<AppointmentModel> allUsedAppointments = future.join();
 
         int minutes = time.getMinutes();
 
@@ -126,10 +128,11 @@ public class ScheduleService implements IScheduleService {
 
 
     @Override
-    public List<AppointmentModel> getAllAppointmentTime() {
+    @Async
+    public CompletableFuture<List<AppointmentModel>> getAllAppointmentTime() {
         var allusedAppointments = iScheduleRepository.getAllAppointmentTime();
 
-        return RepairMapper.toTimeModelList(allusedAppointments);
+        return CompletableFuture.completedFuture(RepairMapper.toTimeModelList(allusedAppointments));
     }
 
 

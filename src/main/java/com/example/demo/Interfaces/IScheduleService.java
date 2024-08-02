@@ -20,7 +20,7 @@ public interface IScheduleService {
 
     List<CheckModel> getSchedulesByDateTimeDentistId(Date date, Time time, Integer dentist_id);
 
-    List<AppointmentModel> getAllAppointmentTime();
+    CompletableFuture<List<AppointmentModel>> getAllAppointmentTime();
 
 
 }
