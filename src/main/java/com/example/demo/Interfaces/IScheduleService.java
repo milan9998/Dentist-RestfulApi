@@ -15,7 +15,8 @@ import java.util.concurrent.CompletableFuture;
 public interface IScheduleService {
     void deleteById(Integer id);
 
-    List<SchedulModel> getAllSchedulingsByDate(Date date);
+    CompletableFuture<List<SchedulModel>> getAllSchedulingsByDate(Date date);
+
     CompletableFuture<SchedulModel> createSchedul(SchedulModel schedul) throws ParseException;
 
     List<CheckModel> getSchedulesByDateTimeDentistId(Date date, Time time, Integer dentist_id);

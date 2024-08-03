@@ -32,6 +32,7 @@ public class AuthenticationController {
 
     @PutMapping("/logout")
     public ResponseEntity<?> logout(@RequestBody LogoutRequestModel x) {
+        var z = x.getId();
        authenticationService.logout(x);
         return ResponseEntity.ok("Logout successful");
     }

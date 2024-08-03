@@ -72,7 +72,7 @@ public class DentistController {
 
         try {
             CompletableFuture<SchedulModel> future = scheduleService.createSchedul(schedulModel);
-            SchedulModel resultModel = future.join(); // Wait for completion and get the result
+            SchedulModel resultModel = future.join();
 
             return ResponseEntity.ok(resultModel);
         } catch (CompletionException e) {
@@ -99,8 +99,11 @@ public class DentistController {
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         Date dates = sdf.parse(sdf.format(date.getDate()));
+        CompletableFuture<List<SchedulModel>> future = scheduleService.getAllSchedulingsByDate(dates);
 
-        return scheduleService.getAllSchedulingsByDate(dates);
+        List<SchedulModel> resultModel = future.join();
+
+        return resultModel;
     }
 
 

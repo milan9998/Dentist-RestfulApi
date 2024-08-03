@@ -38,11 +38,11 @@ public class ScheduleService implements IScheduleService {
 
 
     @Override
-    public List<SchedulModel> getAllSchedulingsByDate(Date date) {
+    public CompletableFuture<List<SchedulModel>> getAllSchedulingsByDate(Date date) {
 
         var all = iScheduleRepository.getAllSchedulingsByDate(date);
 
-        return RepairMapper.toModelListAll(all);
+        return CompletableFuture.completedFuture(RepairMapper.toModelListAll(all));
     }
 
     @Override
