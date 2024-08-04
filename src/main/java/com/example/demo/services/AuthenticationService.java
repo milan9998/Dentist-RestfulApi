@@ -17,6 +17,7 @@ import com.example.demo.repositories.ITokenRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mail.SimpleMailMessage;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -29,10 +30,12 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
+
 //
 @Service
 @RequiredArgsConstructor
-public class AuthenticationService implements OAuth2UserService<OAuth2UserRequest, OAuth2User> {
+public class AuthenticationService  {
     private final IDentistRepository dentistRepository;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
@@ -85,8 +88,8 @@ public class AuthenticationService implements OAuth2UserService<OAuth2UserReques
 
         return ResponseEntity.ok("To confirm your account, please check your e-mail address!");
     }
-
-    public LoginResponseModel authenticate(LoginDentistModel loginDentistModel) throws Throwable {
+    @Async
+    public CompletableFuture<LoginResponseModel> authenticate(LoginDentistModel loginDentistModel) throws Throwable {
         authenticationManager.authenticate
                 (new UsernamePasswordAuthenticationToken(
                         loginDentistModel.getEmail(),
@@ -106,19 +109,18 @@ public class AuthenticationService implements OAuth2UserService<OAuth2UserReques
         token.setDentist((Dentist) authenticatedUser);
         tokenRepository.save(token);
 
-        return LoginResponseModel.builder().token(jwtToken).refreshToken(refreshToken).build();
+        return CompletableFuture.completedFuture(LoginResponseModel.builder().token(jwtToken).refreshToken(refreshToken).build());
     }
 
-    public void logout(LogoutRequestModel id) {
+    @Async
+    public CompletableFuture<Void> logout(LogoutRequestModel id) {
 
         int y = id.getId();
         var x = tokenRepository.revokeTokens(y);
-    }
-
-
-    @Override
-    public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
         return null;
     }
+
+
+
 }
 
