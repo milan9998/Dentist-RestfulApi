@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 public interface IScheduleService {
-    void deleteById(Integer id);
+    CompletableFuture<Void> deleteById(Integer id);
 
     CompletableFuture<List<SchedulModel>> getAllSchedulingsByDate(Date date);
 

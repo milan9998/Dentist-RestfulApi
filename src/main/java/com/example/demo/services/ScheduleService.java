@@ -32,8 +32,10 @@ public class ScheduleService implements IScheduleService {
    private static final Logger logger = LoggerFactory.getLogger(ScheduleService.class);
 
     @Override
-    public void deleteById(Integer id) {
+    @Async
+    public CompletableFuture<Void> deleteById(Integer id) {
         iScheduleRepository.deleteById(id);
+        return CompletableFuture.completedFuture(null);
     }
 
 

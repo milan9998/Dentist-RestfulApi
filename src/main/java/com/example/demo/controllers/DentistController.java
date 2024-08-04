@@ -50,13 +50,23 @@ public class DentistController {
     @PostMapping("create-user-repair")
     public ResponseEntity<?> createUserRepair(@RequestBody @Valid RepairModel repairModel, BindingResult result) {
 
-        return ResponseEntity.ok(userService.createRepair(repairModel));
-    }
+        try{
+            CompletableFuture<RepairModel> future = userService.createRepair(repairModel);
+            RepairModel repairModel1 = future.join();
+            return ResponseEntity.ok(repairModel1);
+        }catch (CompletionException e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
+        }
 
+       // return ResponseEntity.ok(userService.createRepair(repairModel));
+    }
     @GetMapping("get-all-user-repairs")
     public List<RepairModel> getAllUserRepairs() {
-        return dentistService.getAllRepairs();
+        CompletableFuture<List<RepairModel>> future = dentistService.getAllRepairs();
+        List<RepairModel> repairModels = future.join();
+        return repairModels;
     }
+
     /*@GetMapping("get-all-used-appointments")
     public List<AppointmentModel> getAllAppointments() {
         return scheduleService.getAllAppointmentTime();

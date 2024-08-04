@@ -11,15 +11,14 @@ import java.sql.Time;
 import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 public interface IDentistService {
-    List<RepairModel> getAllRepairs();
+    CompletableFuture<List<RepairModel>> getAllRepairs();
 
-    List<RepairModel> getByDentist_id(Integer dentist_id);
+
 
     List<DentistImportantModel> getAllInformationsByDentistid(Integer dentistId);
-    // List<RepairModel> getByDentist_id(Integer dentist_id);
-    SchedulModel createSchedul(SchedulModel schedul) throws ParseException;
 
     List<CheckModel> getSchedulesByDateTimeDentistId(Date date, Time time, Integer dentist_id);
 

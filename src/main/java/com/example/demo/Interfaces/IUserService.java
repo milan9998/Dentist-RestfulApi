@@ -4,6 +4,7 @@ import com.example.demo.models.RepairModel;
 import com.example.demo.models.UserModel;
 
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 public interface IUserService {
     UserModel getUserById(int id);
@@ -20,7 +21,7 @@ public interface IUserService {
 
     List<UserModel> getAllUsers();
 
-    RepairModel createRepair(RepairModel repairModel);
+    CompletableFuture<RepairModel> createRepair(RepairModel repairModel);
 
 
 

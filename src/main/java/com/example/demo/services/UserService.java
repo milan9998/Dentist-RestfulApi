@@ -11,11 +11,13 @@ import com.example.demo.repositories.IRepairRepository;
 import com.example.demo.repositories.IUserRepository;
 import lombok.RequiredArgsConstructor;
 
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 @Service
 @RequiredArgsConstructor
@@ -31,10 +33,11 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public RepairModel createRepair(RepairModel repairModel) {
+    @Async
+    public CompletableFuture<RepairModel> createRepair(RepairModel repairModel) {
         DentalRepair repair = RepairMapper.toEntity(repairModel);
         var saved = repairRepository.save(repair);
-        return RepairMapper.toModel(saved);
+        return CompletableFuture.completedFuture(RepairMapper.toModel(saved));
     }
 
 
