@@ -45,7 +45,8 @@ public class AuthenticationService  {
     private final IConfirmationRepository confirmationRepository;
     private final IMailService mailService;
 
-    public ResponseEntity<String> signUp(DentistModel dentistModel) {
+    @Async
+    public CompletableFuture<ResponseEntity<String>> signUp(DentistModel dentistModel) {
         var newUser = UserMapper.toEntity(dentistModel, passwordEncoder);
 
         var userMayExist = dentistRepository.findByEmail(dentistModel.getEmail());
@@ -86,7 +87,7 @@ public class AuthenticationService  {
             roleRepository.save(dentistRoles);
         }
 
-        return ResponseEntity.ok("To confirm your account, please check your e-mail address!");
+        return CompletableFuture.completedFuture(ResponseEntity.ok("To confirm your account, please check your e-mail address!"));
     }
     @Async
     public CompletableFuture<LoginResponseModel> authenticate(LoginDentistModel loginDentistModel) throws Throwable {

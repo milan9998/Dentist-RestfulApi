@@ -29,7 +29,22 @@ public class AuthenticationController {
     }
     @PostMapping("/signup")
     public ResponseEntity<?> signup(@RequestBody DentistModel dentistModel) {
-        return ResponseEntity.ok(authenticationService.signUp(dentistModel));
+        try{
+            CompletableFuture<ResponseEntity<String>> future = authenticationService.signUp(dentistModel);
+            ResponseEntity<String> dentistModel1 = future.join();
+            return ResponseEntity.status(HttpStatus.CREATED).body(dentistModel1);
+        }catch (CompletionException e) {
+            // Handle the exception
+            Throwable cause = e.getCause();
+            if (cause instanceof IllegalArgumentException) {
+                return ResponseEntity.badRequest().body(cause.getMessage());
+            }
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(cause.getMessage());
+
+        }
+        //  return ResponseEntity.ok(authenticationService.signUp(dentistModel));
+
+
     }
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginDentistModel dentistModel) throws Throwable {
