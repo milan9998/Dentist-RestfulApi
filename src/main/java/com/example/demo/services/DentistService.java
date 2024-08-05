@@ -65,12 +65,6 @@ public class DentistService implements IDentistService {
         return CompletableFuture.completedFuture(RepairMapper.toModelImportantList(x));
     }
 
-    @Override
-    public List<CheckModel> getSchedulesByDateTimeDentistId(Date date, Time time, Integer dentist_id) {
-        var schedules = scheduleRepository.getAllByDateTimeDentistId(date, time, dentist_id);
-        return RepairMapper.toModelCheckList(schedules);
-    }
-
 
 
 

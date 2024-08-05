@@ -84,7 +84,7 @@ public class DentistController {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
         }
 
-       // return ResponseEntity.ok(userService.createRepair(repairModel));
+
     }
 
     @GetMapping("get-all-user-repairs")

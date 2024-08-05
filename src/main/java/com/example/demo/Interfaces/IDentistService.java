@@ -20,7 +20,7 @@ public interface IDentistService {
 
     CompletableFuture<List<DentistImportantModel>> getAllInformationsByDentistid(Integer dentistId);
 
-    List<CheckModel> getSchedulesByDateTimeDentistId(Date date, Time time, Integer dentist_id);
+
 
     ResponseEntity<?> confirmEmail(String confirmationToken);
 

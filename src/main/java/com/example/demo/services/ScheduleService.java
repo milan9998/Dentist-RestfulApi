@@ -66,7 +66,7 @@ public class ScheduleService implements IScheduleService {
         SimpleDateFormat formatTime = new SimpleDateFormat("HH:mm:ss");
         Time time = new Time(formatTime.parse(timeString).getTime());
 
-      //  var allUsedAppointments = getAllAppointmentTime();
+        //  var allUsedAppointments = getAllAppointmentTime();
         CompletableFuture<List<AppointmentModel>> future = getAllAppointmentTime();
         List<AppointmentModel> allUsedAppointments = future.join();
 
