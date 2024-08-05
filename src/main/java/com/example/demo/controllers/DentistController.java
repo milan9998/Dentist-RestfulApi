@@ -60,6 +60,7 @@ public class DentistController {
 
        // return ResponseEntity.ok(userService.createRepair(repairModel));
     }
+
     @GetMapping("get-all-user-repairs")
     public List<RepairModel> getAllUserRepairs() {
         CompletableFuture<List<RepairModel>> future = dentistService.getAllRepairs();
@@ -74,7 +75,8 @@ public class DentistController {
 
     @GetMapping("get-repairs-by-dentist-id")
     public List<DentistImportantModel> getRepairsByDentistId(@RequestParam @Valid Integer dentist_id) {
-        return dentistService.getAllInformationsByDentistid(dentist_id);
+        CompletableFuture<List<DentistImportantModel>> future = dentistService.getAllInformationsByDentistid(dentist_id);
+        return future.join();
     }
 
     @PostMapping("schedule-patient")

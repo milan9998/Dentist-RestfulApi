@@ -57,11 +57,12 @@ public class DentistService implements IDentistService {
     }
 
     @Override
-    public List<DentistImportantModel> getAllInformationsByDentistid(Integer dentist_id) {
+    @Async
+    public CompletableFuture<List<DentistImportantModel>> getAllInformationsByDentistid(Integer dentist_id) {
 
         var x = repairRepository.getAllBydentist_id(dentist_id);
 
-        return RepairMapper.toModelImportantList(x);
+        return CompletableFuture.completedFuture(RepairMapper.toModelImportantList(x));
     }
 
     @Override

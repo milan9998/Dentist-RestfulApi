@@ -18,7 +18,7 @@ public interface IDentistService {
 
 
 
-    List<DentistImportantModel> getAllInformationsByDentistid(Integer dentistId);
+    CompletableFuture<List<DentistImportantModel>> getAllInformationsByDentistid(Integer dentistId);
 
     List<CheckModel> getSchedulesByDateTimeDentistId(Date date, Time time, Integer dentist_id);
 
