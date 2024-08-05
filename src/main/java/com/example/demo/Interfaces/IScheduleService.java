@@ -19,7 +19,7 @@ public interface IScheduleService {
 
     CompletableFuture<SchedulModel> createSchedul(SchedulModel schedul) throws ParseException;
 
-    List<CheckModel> getSchedulesByDateTimeDentistId(Date date, Time time, Integer dentist_id);
+    CompletableFuture<List<CheckModel>> getSchedulesByDateTimeDentistId(Date date, Time time, Integer dentist_id);
 
     CompletableFuture<List<AppointmentModel>> getAllAppointmentTime();
 

@@ -76,15 +76,10 @@ public class ScheduleService implements IScheduleService {
         if (minutes % 30 != 0) {
             throw new ParseException("You must enter the right time here is used appointments " + allUsedAppointments , 0);
         }
-
-
-
         //  1   2
-        List<CheckModel> smth = getSchedulesByDateTimeDentistId(dates, time, schedule.getDentist_id());
 
-
-
-
+        CompletableFuture<List<CheckModel>> future1 = getSchedulesByDateTimeDentistId(dates, time, schedule.getDentist_id());
+        List<CheckModel> smth = future1.join();
         for (CheckModel checkModel : smth) {
 
             if (dates.equals(checkModel.getDate()) &&
@@ -123,9 +118,10 @@ public class ScheduleService implements IScheduleService {
 
 
     @Override
-    public List<CheckModel> getSchedulesByDateTimeDentistId(Date date, Time time, Integer dentist_id) {
+    @Async
+    public CompletableFuture<List<CheckModel>> getSchedulesByDateTimeDentistId(Date date, Time time, Integer dentist_id) {
         var schedules = iScheduleRepository.getAllByDateTimeDentistId(date, time, dentist_id);
-        return RepairMapper.toModelCheckList(schedules);
+        return CompletableFuture.completedFuture(RepairMapper.toModelCheckList(schedules));
     }
 
 
