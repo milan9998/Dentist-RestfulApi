@@ -26,10 +26,12 @@ public class UserService implements IUserService {
     private final BCryptPasswordEncoder passwordEncoder;
     private final IRepairRepository repairRepository;
 
-    public List<UserModel> getAllUsers() {
+    @Async
+    @Override
+    public CompletableFuture<List<UserModel>> getAllUsers() {
         List<User> users = new ArrayList<User>();
         users = userRepository.findAll();
-        return UserMapper.toUserModelList(users);
+        return CompletableFuture.completedFuture(UserMapper.toUserModelList(users));
     }
 
     @Override
@@ -58,7 +60,7 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public UserModel createUser(UserModel model) {
+    public CompletableFuture<UserModel> createUser(UserModel model) {
         var user = UserMapper.toEntity(model, passwordEncoder);
 
         var alreadyExists = userRepository.findByEmail(model.getEmail());
@@ -67,7 +69,7 @@ public class UserService implements IUserService {
         }
 
         var savedUser = userRepository.save(user);
-        return UserMapper.toModel(savedUser);
+        return CompletableFuture.completedFuture(UserMapper.toModel(savedUser));
     }
 
     @Override
@@ -76,9 +78,10 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public void delete(Integer user_id) {
+    @Async
+    public CompletableFuture<Void> delete(Integer user_id) {
         userRepository.deleteById(user_id);
-
+    return CompletableFuture.completedFuture(null);
     }
 
 

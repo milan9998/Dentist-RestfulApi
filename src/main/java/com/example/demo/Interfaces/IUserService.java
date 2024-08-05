@@ -13,13 +13,13 @@ public interface IUserService {
 
     UserModel getUserByUsername(String username);
 
-    UserModel createUser(UserModel user);
+    CompletableFuture<UserModel> createUser(UserModel user);
 
     UserModel updateUser(UserModel user);
 
-    void delete(Integer user_id);
+    CompletableFuture<Void> delete(Integer user_id);
 
-    List<UserModel> getAllUsers();
+    CompletableFuture<List<UserModel>> getAllUsers();
 
     CompletableFuture<RepairModel> createRepair(RepairModel repairModel);
 

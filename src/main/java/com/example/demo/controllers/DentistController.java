@@ -29,11 +29,38 @@ public class DentistController {
     private final IScheduleService scheduleService;
 
 
+    @PostMapping("schedule-patient")
+    public ResponseEntity<?> schedulePatient(@RequestBody @Valid SchedulModel schedulModel, BindingResult result) {
+
+        try {
+            CompletableFuture<SchedulModel> future = scheduleService.createSchedul(schedulModel);
+            SchedulModel resultModel = future.join();
+
+            return ResponseEntity.ok(resultModel);
+        } catch (CompletionException e) {
+            // Handle the exception
+            Throwable cause = e.getCause();
+            if (cause instanceof IllegalArgumentException) {
+                return ResponseEntity.badRequest().body(cause.getMessage());
+            }
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(cause.getMessage());
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     @PostMapping("create-user")
     public ResponseEntity<?> createUser(@RequestBody @Valid UserModel userModel, BindingResult result) {
-        return ResponseEntity.
-                ok(userService.createUser(userModel));
+
+        try{
+            CompletableFuture<UserModel> future = userService.createUser(userModel);
+            UserModel resultModel = future.join();
+            return ResponseEntity.ok(resultModel);
+        }catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
+
+
     }
 
     @DeleteMapping("user-delete")
@@ -44,7 +71,8 @@ public class DentistController {
 
     @GetMapping("get-all-patients")
     public List<UserModel> getAllPatients() {
-        return userService.getAllUsers();
+        CompletableFuture<List<UserModel>> future = userService.getAllUsers();
+        return future.join();
     }
 
     @PostMapping("create-user-repair")
@@ -79,25 +107,7 @@ public class DentistController {
         return future.join();
     }
 
-    @PostMapping("schedule-patient")
-    public ResponseEntity<?> schedulePatient(@RequestBody @Valid SchedulModel schedulModel, BindingResult result) {
 
-        try {
-            CompletableFuture<SchedulModel> future = scheduleService.createSchedul(schedulModel);
-            SchedulModel resultModel = future.join();
-
-            return ResponseEntity.ok(resultModel);
-        } catch (CompletionException e) {
-            // Handle the exception
-            Throwable cause = e.getCause();
-            if (cause instanceof IllegalArgumentException) {
-                return ResponseEntity.badRequest().body(cause.getMessage());
-            }
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(cause.getMessage());
-        } catch (ParseException e) {
-            throw new RuntimeException(e);
-        }
-    }
 
 
     @DeleteMapping("delete-schedule")
