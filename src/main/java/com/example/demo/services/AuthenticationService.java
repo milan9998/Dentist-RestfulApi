@@ -53,14 +53,14 @@ public class AuthenticationService  {
         if (userMayExist.isPresent()) {
             throw new IllegalArgumentException("Email already in use");
         }
-        //new mapper may be needed for insert
+
         var saveUser = dentistRepository.save(newUser);
 
         ConfirmationToken confirmationToken = new ConfirmationToken(saveUser);
         confirmationRepository.save(confirmationToken);
         SimpleMailMessage mailMessage = null;
         try {
-            // Slanje emaila za potvrdu
+
             mailMessage = new SimpleMailMessage();
             mailMessage.setTo(saveUser.getEmail());
             mailMessage.setSubject("Complete Registration!");
