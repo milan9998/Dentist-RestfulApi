@@ -7,12 +7,18 @@ import com.example.demo.models.LoginResponseModel;
 import com.example.demo.models.LogoutRequestModel;
 import com.example.demo.services.AuthenticationService;
 import com.example.demo.services.DentistService;
+
+import jakarta.websocket.Session;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-
+import org.springframework.web.servlet.ModelAndView;
 import java.text.ParseException;
+
+import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionException;
 
@@ -23,10 +29,34 @@ public class AuthenticationController {
     private final AuthenticationService authenticationService;
     private final DentistService dentistService;
 
+
     @GetMapping("/confirm-account")
     public ResponseEntity<?> confirmAccount(@RequestParam("token") String token) {
         return dentistService.confirmEmail(token);
     }
+
+    @PostMapping("/forgot-password")
+    public ResponseEntity<?> forgotPassword(@RequestBody Map<String, String> request) {
+        String email = request.get("email");
+        dentistService.confirmRessetPassword(email);
+        return ResponseEntity.ok("Check your email");
+    }
+    @GetMapping("/show-reset-password")
+    public ModelAndView index () {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("reset-password");
+        return modelAndView;
+    }
+
+
+    @PostMapping("/reset-password")
+    public ResponseEntity<?> resetPassword(
+            @RequestParam("email") String email,
+            @RequestParam("password") String password) {
+        dentistService.confirmNewPassword(password, email);
+        return ResponseEntity.ok("Password reset successful");
+    }
+
     @PostMapping("/signup")
     public ResponseEntity<?> signup(@RequestBody DentistModel dentistModel) {
         try{

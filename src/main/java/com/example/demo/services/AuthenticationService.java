@@ -45,6 +45,7 @@ public class AuthenticationService  {
     private final IConfirmationRepository confirmationRepository;
     private final IMailService mailService;
 
+
     @Async
     public CompletableFuture<ResponseEntity<String>> signUp(DentistModel dentistModel) {
         var newUser = UserMapper.toEntity(dentistModel, passwordEncoder);

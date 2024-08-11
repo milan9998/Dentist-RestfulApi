@@ -14,6 +14,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.scheduling.annotation.Async;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.sql.Time;
@@ -32,6 +33,7 @@ public class DentistService implements IDentistService {
     private final IConfirmationRepository confirmationRepository;
     private final IDentistRepository dentistRepository;
     private final IMailService mailService;
+    private final BCryptPasswordEncoder passwordEncoder;
 
 
     @Override
@@ -45,6 +47,38 @@ public class DentistService implements IDentistService {
         }
         return ResponseEntity.badRequest().body("Error: Couldn't verify email");
     }
+
+    @Override
+    public ResponseEntity<?> confirmNewPassword(String password,String email) {
+
+         dentistRepository.resetPassword(email,passwordEncoder.encode(password));
+
+        return ResponseEntity.ok("Password verified successfully");
+    }
+
+
+    @Override
+    public ResponseEntity<?> confirmRessetPassword(String email) {
+        var userMayExist = dentistRepository.findByEmail(email);
+        if (!userMayExist.isPresent()) {
+            throw new IllegalArgumentException("Email not found");
+        }
+        SimpleMailMessage mailMessage = null;
+
+        try{
+            mailMessage = new SimpleMailMessage();
+            mailMessage.setTo(email);
+            mailMessage.setSubject("Reset Password");
+            mailMessage.setText("To confirm your account, please click here: "
+                    + "http://localhost:8080/auth/show-reset-password?email=" + email);
+            mailService.sendEmail(mailMessage);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+        return ResponseEntity.ok("Reset password has sent to your email");
+    }
+
 
 
     @Override

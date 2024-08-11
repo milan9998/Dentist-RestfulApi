@@ -25,6 +25,7 @@ public interface IDentistService {
     ResponseEntity<?> confirmEmail(String confirmationToken);
 
 
-    
+    ResponseEntity<?> confirmRessetPassword(String email);
 
+    ResponseEntity<?> confirmNewPassword(String password,String email);
 }
