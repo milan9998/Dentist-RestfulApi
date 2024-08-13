@@ -8,6 +8,7 @@ import com.example.demo.models.LogoutRequestModel;
 import com.example.demo.services.AuthenticationService;
 import com.example.demo.services.DentistService;
 
+import jakarta.servlet.http.HttpSession;
 import jakarta.websocket.Session;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -35,25 +36,29 @@ public class AuthenticationController {
         return dentistService.confirmEmail(token);
     }
 
+
+
     @PostMapping("/forgot-password")
-    public ResponseEntity<?> forgotPassword(@RequestBody Map<String, String> request) {
+    public ResponseEntity<?> forgotPassword(HttpSession session, @RequestBody Map<String, String> request) {
         String email = request.get("email");
-        dentistService.confirmRessetPassword(email);
-        return ResponseEntity.ok("Check your email");
+
+        session.setAttribute("email", email);
+        return ResponseEntity.ok("Check your email"+ dentistService.confirmRessetPassword(email));
     }
+
     @GetMapping("/show-reset-password")
-    public ModelAndView index () {
+    public ModelAndView index (@RequestParam("email") String email) {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("reset-password");
+        modelAndView.addObject("email", email);
         return modelAndView;
     }
 
 
     @PostMapping("/reset-password")
-    public ResponseEntity<?> resetPassword(
-            @RequestParam("email") String email,
-            @RequestParam("password") String password) {
-        dentistService.confirmNewPassword(password, email);
+    public ResponseEntity<?> resetPassword(@RequestParam("email") String email,@RequestParam("password") String password) {
+
+        dentistService.confirmNewPassword(password,email );
         return ResponseEntity.ok("Password reset successful");
     }
 
